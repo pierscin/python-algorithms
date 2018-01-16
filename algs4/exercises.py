@@ -50,10 +50,10 @@ def infix_to_postfix(e):
     Write a filter InfixToPostfix that converts an arithmetic expression from infix to postfix.
 
     Args:
-        e: String with infix expression. Every element should be separated by at least 1 whitespace character.
+        e (str): String with infix expression. Every element should be separated by at least 1 whitespace character.
 
     Returns:
-        Infix expression converted to its postfix form.
+        str: Infix expression converted to its postfix form.
     """
     op_to_precedence = {'+': 1, '-': 1, '*': 2, '/': 2, '^': 3}
     right_associative_ops = {'^'}
@@ -102,10 +102,10 @@ def rpn(e):
     evaluates it and prints the value.
 
     Args:
-        e: String with postfix expression. Every element should be separated by at least 1 whitespace character.
+        e (str): String with postfix expression. Every element should be separated by at least 1 whitespace character.
 
     Returns:
-        Evaluated value of an expression as float number.
+        float: Evaluated value of an expression as float number.
     """
     op_to_strategy = {
         'r': (1, lambda x: -x),
