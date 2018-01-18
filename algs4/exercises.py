@@ -1,7 +1,7 @@
-from typing import Iterable, Sequence
+from typing import Iterable, Sequence, Tuple
 
 
-def insert_left_parentheses(e):
+def insert_left_parentheses(e: str) -> str:
     """Inserts left parentheses to imbalanced expression without them.
 
     Left parentheses are inserted according to the example in exercise 1.3.9 (full content below).
@@ -17,11 +17,11 @@ def insert_left_parentheses(e):
         ( ( 1 + 2 ) * ( ( 3 - 4 ) * ( 5 - 6 ) ) ) pierscin: my correction - expression in book was imbalanced
 
      Args:
-        e (str): String with infix expression and without left parentheses. Every element should be separated by
+        e: String with infix expression and without left parentheses. Every element should be separated by
             at least 1 whitespace character.
 
     Returns:
-        str: Expression with balanced parentheses.
+        Expression with balanced parentheses.
     """
     tokens = e.split()
     stack = []
@@ -34,7 +34,7 @@ def insert_left_parentheses(e):
     return stack.pop()
 
 
-def infix_to_postfix(e):
+def infix_to_postfix(e: str) -> str:
     """Converts infix expression to its postfix equivalent.
 
     Expression can contain brackets, symbols and one of the following operators:
@@ -51,10 +51,10 @@ def infix_to_postfix(e):
     Write a filter InfixToPostfix that converts an arithmetic expression from infix to postfix.
 
     Args:
-        e (str): String with infix expression. Every element should be separated by at least 1 whitespace character.
+        e: String with infix expression. Every element should be separated by at least 1 whitespace character.
 
     Returns:
-        str: Infix expression converted to its postfix form.
+        Infix expression converted to its postfix form.
     """
     op_to_precedence = {'+': 1, '-': 1, '*': 2, '/': 2, '^': 3}
     right_associative_ops = {'^'}
@@ -83,7 +83,7 @@ def infix_to_postfix(e):
     return ' '.join(output)
 
 
-def rpn(e):
+def rpn(e: str) -> float:
     """Reverse Polish Notation (RPN) calculator.
 
     Evaluates float value of an expression string given in postfix notation.
@@ -103,10 +103,10 @@ def rpn(e):
     evaluates it and prints the value.
 
     Args:
-        e (str): String with postfix expression. Every element should be separated by at least 1 whitespace character.
+        e: String with postfix expression. Every element should be separated by at least 1 whitespace character.
 
     Returns:
-        float: Evaluated value of an expression as float number.
+        Evaluated value of an expression as float number.
     """
     op_to_strategy = {
         'r': (1, lambda x: -x),
@@ -129,7 +129,7 @@ def rpn(e):
     return stack.pop()
 
 
-def sorted_intersection(A, B):
+def sorted_intersection(A: Iterable, B: Iterable) -> list:
     """Common elements of both iterables in sorted order.
 
     This method is connected to exercise 1.4.12 (full content below).
@@ -140,16 +140,16 @@ def sorted_intersection(A, B):
     in sorted order. The running time of your program should be proportional to N in the worst case.
 
     Args:
-        A (Iterable): iterable with sortable elements
-        B (Iterable): iterable with sortable elements
+        A: iterable with sortable elements
+        B: iterable with sortable elements
 
     Returns:
-        list: sorted intersection of sequences
+        Sorted intersection of sequences
     """
     return sorted(set(A) & set(B))
 
 
-def three_sum(iterable):
+def three_sum(iterable: Iterable[int]) -> int:
     """Count number of triples in iterable that sum to 0.
 
     This method is connected to exercise 1.4.15 (full content below).
@@ -161,10 +161,10 @@ def three_sum(iterable):
     Then apply a similar idea to develop a quadratic algorithm for the 3-sum problem.
 
     Args:
-        iterable (Iterable): numbers
+        iterable: numbers
 
     Returns:
-        int: number of triples in A that sum to 0
+        Number of triples in A that sum to 0
     """
     A = sorted(iterable)
     i = 0
@@ -190,7 +190,7 @@ def three_sum(iterable):
     return count
 
 
-def closest_pair(iterable):
+def closest_pair(iterable: Iterable[float]) -> Tuple[float, float]:
     """Returns closest (in absolute value) pair of numbers in iterable.
 
     This method is connected to exercise 1.4.16 (full content below).
@@ -202,10 +202,10 @@ def closest_pair(iterable):
     The running time of your program should be linearithmic in the worst case.
 
     Args:
-        iterable (Iterable): numbers
+        iterable: numbers
 
     Returns:
-        tuple: pair of closest numbers
+        Pair of closest numbers
     """
     A = sorted(iterable)
     closest = abs(A[1] - A[0])
@@ -219,7 +219,7 @@ def closest_pair(iterable):
     return A[l], A[l + 1]
 
 
-def farthest_pair(iterable):
+def farthest_pair(iterable: Iterable[float]) -> Tuple[float, float]:
     """Returns farthest (in absolute value) pair of numbers in iterable.
 
     This method is connected to exercise 1.4.17 (full content below).
@@ -231,15 +231,15 @@ def farthest_pair(iterable):
     The running time of your program should be linear in the worst case.
 
     Args:
-        iterable (Iterable): numbers
+        iterable: numbers
 
     Returns:
-        tuple: pair of farthest numbers
+        Pair of farthest numbers
     """
     return min(iterable), max(iterable)
 
 
-def local_min(sequence):
+def local_min(sequence: Sequence) -> int:
     """Returns index of a local minimum of distinct numbers sequence. More assumptions in docstring.
 
     This method is connected to exercise 1.4.18 (full content below), but there should be one correction and another
@@ -254,10 +254,10 @@ def local_min(sequence):
     an index i such that a[i-1] < a[i] < a[i+1]. Your program should use ~2lg N compares in the worst case.
 
     Args:
-        sequence (Sequence): sequence of numbers
+        sequence: sequence of numbers
 
     Returns:
-        int: index of a local minimum
+        Index of a local minimum
 
     Raises:
         ValueError: when local minimum is not found
@@ -277,3 +277,27 @@ def local_min(sequence):
 
     raise ValueError("No local minimum found - sequence doesn't fulfill all assumptions.")
 
+
+def faster_insertion(A: Sequence) -> None:
+    """Insertion sort implementation with shorter inner loop.
+
+    For details about insertion sort see: sorts.insertion
+
+    This method is connected to exercise 2.1.25 (full content below)
+
+    2.1.25
+
+    Insertion sort without exchanges. Develop an implementation of insertion sort that moves larger elements to
+    the right one position with one array access per entry, rather than using exch(). Use SortCompare to evaluate
+    the effectiveness of doing so.
+
+    Args:
+        A: sequence of comparable objects
+    """
+    for i in range(1, len(A)):
+        x = A[i]
+        j = i
+        while j > 0 and A[j - 1] > x:
+            A[j] = A[j - 1]
+            j -= 1
+        A[j] = x

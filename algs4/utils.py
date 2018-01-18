@@ -1,5 +1,5 @@
 import time
-from typing import Sequence
+from typing import Sequence, Dict
 
 
 class Benchmark:
@@ -10,7 +10,7 @@ class Benchmark:
         self.avg_time = total_time / tries
 
 
-def running_time_of(methods, args, tries):
+def running_time_of(methods: Sequence, args: Sequence, tries: int) -> Dict[str, Benchmark]:
     """Returns benchmark data for each method listed after specified number of executions and arguments.
 
     Passing methods and args is tricky, because they should always be a sequence even if there's 1 tested method or
@@ -24,19 +24,19 @@ def running_time_of(methods, args, tries):
         >>> running_time_of((selection, insertion), [[randint(0, 10) for _ in range(100)]], 1000)
 
     Args:
-        methods (Sequence): sequence of compared methods
-        args (Sequence): arguments unpacked for each method
-        tries (int): number of executions for each method
+        methods: sequence of compared methods
+        args: arguments unpacked for each method
+        tries: number of executions for each method
 
     Returns:
-        dict: A dict mapping with each method name as key and Benchmark object with results
+        A dict mapping with each method name as key and Benchmark object with results
     """
     benchmarks = dict()
     for m in methods:
         t = 0
         for _ in range(tries):
             s = time.process_time()
-            m(*args)
+            m(*args)  # TODO: args should be copied
             e = time.process_time()
             t += e - s
         benchmarks[m.__name__] = Benchmark(m.__name__, t, tries)
