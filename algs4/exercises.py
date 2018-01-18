@@ -1,5 +1,3 @@
-
-
 def insert_left_parentheses(e):
     """Inserts left parentheses to imbalanced expression without them.
 
@@ -126,4 +124,137 @@ def rpn(e):
             stack.append(float(t))
 
     return stack.pop()
+
+
+def sorted_intersection(A, B):
+    """Common elements of both sequences in sorted order.
+
+    This method is connected to exercise 1.4.12 (full content below).
+
+    1.4.12
+
+    Write a program that, given two sorted arrays of N int values, prints all elements that appear in both arrays,
+    in sorted order. The running time of your program should be proportional to N in the worst case.
+
+    Args:
+        A: sequence of sortable elements
+        B: sequence of sortable elements
+
+    Returns:
+        list: sorted intersection of sequences
+    """
+    return sorted(set(A) & set(B))
+
+
+def three_sum(iterable):
+    """Count number of triples in iterable that sum to 0.
+
+    This method is connected to exercise 1.4.15 (full content below).
+
+    1.4.15
+
+    Faster 3-sum. As a warm-up, develop an implementation TwoSumFaster that uses a linear algorithm to count the pairs
+    that sum to zero after the array is sorted (instead of the binary-search-based linearithmic algorithm).
+    Then apply a similar idea to develop a quadratic algorithm for the 3-sum problem.
+
+    Args:
+        iterable: sequence of integers
+
+    Returns:
+        int: number of triples in A that sum to 0
+    """
+    A = sorted(iterable)
+    i = 0
+    count = 0
+
+    while i < len(A) - 2:
+        l, r = i + 1, len(A) - 1
+
+        while l < r:
+            s = A[i] + A[l] + A[r]
+            if s == 0:
+                count += 1
+                while l < r and A[r] == A[r - 1]: r -= 1
+                while l < r and A[l] == A[l + 1]: l += 1
+                l, r = l + 1, r - 1
+            elif s > 0:
+                r -= 1
+            else:
+                l += 1
+        while i < len(A) - 2 and A[i] == A[i + 1]: i += 1
+        i += 1
+
+    return count
+
+
+def closest_pair(iterable):
+    """Returns closest (in absolute value) pair of numbers in iterable.
+
+    This method is connected to exercise 1.4.16 (full content below).
+
+    1.4.16
+
+    Closest pair (in one dimension). Write a program that, given an array a[] of N double values, finds a closest pair:
+    two values whose difference is no greater than the the difference of any other pair (in absolute value).
+    The running time of your program should be linearithmic in the worst case.
+
+    Args:
+        iterable: sequence of numbers
+
+    Returns:
+        tuple: pair of closest numbers
+    """
+    A = sorted(iterable)
+    closest = abs(A[1] - A[0])
+    l = 0
+
+    for i in range(1, len(A) - 1):
+        current = abs(A[i] - A[i + 1])
+        if current < closest:
+            closest, l = current, i
+            if closest == 0: break
+    return A[l], A[l + 1]
+
+
+def farthest_pair(iterable):
+    """Returns farthest (in absolute value) pair of numbers in iterable.
+
+    This method is connected to exercise 1.4.17 (full content below).
+
+    1.4.17
+
+    Farthest pair (in one dimension). Write a program that, given an array a[] of N double values, finds a farthest pair:
+    two values whose difference is no smaller than the the difference of any other pair (in absolute value).
+    The running time of your program should be linear in the worst case.
+
+    Args:
+        iterable: sequence of numbers
+
+    Returns:
+        tuple: pair of farthest numbers
+    """
+    return min(iterable), max(iterable)
+
+
+def local_min(iterable):
+    """Returns index of local minimum of iterable with distinct numbers.
+
+    This method is connected to exercise 1.4.18 (full content below), but there should be one correction and another
+    assumption for it in order to be solve task in logarithmic time:
+     - a[i-1] < a[i] < a[i+1] -> a[i-1] > a[i] < a[i+1]
+     - "first two numbers are decreasing and last two numbers are increasing".
+       This deals with case e.g. [10, -1000, 11, 9, 8, 7, 6].
+
+    1.4.18
+
+    Local minimum of an array. Write a program that, given an array a[] of N distinct integers, finds a local minimum:
+    an index i such that a[i-1] < a[i] < a[i+1]. Your program should use ~2lg N compares in the worst case..'''
+
+    Args:
+        iterable: sequence of numbers
+
+    Returns:
+        int: index of local minimum
+    """
+    pass
 
