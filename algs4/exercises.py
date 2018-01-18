@@ -127,7 +127,7 @@ def rpn(e):
 
 
 def sorted_intersection(A, B):
-    """Common elements of both sequences in sorted order.
+    """Common elements of both iterables in sorted order.
 
     This method is connected to exercise 1.4.12 (full content below).
 
@@ -137,8 +137,8 @@ def sorted_intersection(A, B):
     in sorted order. The running time of your program should be proportional to N in the worst case.
 
     Args:
-        A: sequence of sortable elements
-        B: sequence of sortable elements
+        A: iterable with sortable elements
+        B: iterable with sortable elements
 
     Returns:
         list: sorted intersection of sequences
@@ -158,7 +158,7 @@ def three_sum(iterable):
     Then apply a similar idea to develop a quadratic algorithm for the 3-sum problem.
 
     Args:
-        iterable: sequence of integers
+        iterable: numbers
 
     Returns:
         int: number of triples in A that sum to 0
@@ -199,7 +199,7 @@ def closest_pair(iterable):
     The running time of your program should be linearithmic in the worst case.
 
     Args:
-        iterable: sequence of numbers
+        iterable: numbers
 
     Returns:
         tuple: pair of closest numbers
@@ -228,7 +228,7 @@ def farthest_pair(iterable):
     The running time of your program should be linear in the worst case.
 
     Args:
-        iterable: sequence of numbers
+        iterable: numbers
 
     Returns:
         tuple: pair of farthest numbers
@@ -236,25 +236,41 @@ def farthest_pair(iterable):
     return min(iterable), max(iterable)
 
 
-def local_min(iterable):
-    """Returns index of local minimum of iterable with distinct numbers.
+def local_min(sequence):
+    """Returns index of a local minimum of distinct numbers sequence. More assumptions in docstring.
 
     This method is connected to exercise 1.4.18 (full content below), but there should be one correction and another
     assumption for it in order to be solve task in logarithmic time:
      - a[i-1] < a[i] < a[i+1] -> a[i-1] > a[i] < a[i+1]
      - "first two numbers are decreasing and last two numbers are increasing".
-       This deals with case e.g. [10, -1000, 11, 9, 8, 7, 6].
+       This deals with case e.g. [6, -1000, 5, 4, 3, 2, 1].
 
     1.4.18
 
     Local minimum of an array. Write a program that, given an array a[] of N distinct integers, finds a local minimum:
-    an index i such that a[i-1] < a[i] < a[i+1]. Your program should use ~2lg N compares in the worst case..'''
+    an index i such that a[i-1] < a[i] < a[i+1]. Your program should use ~2lg N compares in the worst case.
 
     Args:
-        iterable: sequence of numbers
+        sequence: sequence of numbers
 
     Returns:
-        int: index of local minimum
+        int: index of a local minimum
+
+    Raises:
+        ValueError: when local minimum is not found
     """
-    pass
+    A = sequence
+
+    lo, hi = 0, len(A) - 1
+
+    while lo < hi:
+        mid = (hi + lo) // 2
+        if A[mid - 1] > A[mid] < A[mid + 1]: return mid
+
+        if A[mid - 1] < A[mid + 1]:
+            hi = mid - 1
+        else:
+            lo = mid + 1
+
+    raise ValueError("No local minimum found - sequence doesn't fulfill all assumptions.")
 

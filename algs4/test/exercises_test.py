@@ -1,5 +1,11 @@
+"""Tests for exercises.
+
+To be more concise, one test is written per one method. This isn't the most readable way and should be refactored later.
+"""
+
 from pytest import approx
-from algs4.exercises import insert_left_parentheses, infix_to_postfix, rpn
+
+from algs4.exercises import insert_left_parentheses, infix_to_postfix, rpn, sorted_intersection, local_min
 
 
 def test_insert_left_parentheses():
@@ -18,3 +24,19 @@ def test_infix_to_postfix():
 
 def test_rpn():
     assert rpn('2 7 + 3 / 14 3 - 4 * + 2 / r') == approx(-23.5)
+
+
+def test_intersection():
+    assert sorted_intersection([1], [2]) == []
+    assert sorted_intersection([1], [1]) == [1]
+    assert sorted_intersection([1, 1], [1]) == [1]
+    assert sorted_intersection([1, 2], [2]) == [2]
+    assert sorted_intersection([1, 2, 2, 2, 2, 3, 4], [3, 4]) == [3, 4]
+
+
+def test_local_min():
+    assert local_min([1, -1, 2]) == 1
+    assert local_min([4, 3, -1, 2]) == 2
+    assert local_min([3, -1, 2, 1]) == 1
+    assert local_min([1, -1, 2, -2]) == 1
+    assert local_min([1, -1, 2, -2, 3]) in {1, 3}
