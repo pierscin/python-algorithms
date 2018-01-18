@@ -1,3 +1,6 @@
+from typing import Iterable, Sequence
+
+
 def insert_left_parentheses(e):
     """Inserts left parentheses to imbalanced expression without them.
 
@@ -137,8 +140,8 @@ def sorted_intersection(A, B):
     in sorted order. The running time of your program should be proportional to N in the worst case.
 
     Args:
-        A: iterable with sortable elements
-        B: iterable with sortable elements
+        A (Iterable): iterable with sortable elements
+        B (Iterable): iterable with sortable elements
 
     Returns:
         list: sorted intersection of sequences
@@ -158,7 +161,7 @@ def three_sum(iterable):
     Then apply a similar idea to develop a quadratic algorithm for the 3-sum problem.
 
     Args:
-        iterable: numbers
+        iterable (Iterable): numbers
 
     Returns:
         int: number of triples in A that sum to 0
@@ -199,7 +202,7 @@ def closest_pair(iterable):
     The running time of your program should be linearithmic in the worst case.
 
     Args:
-        iterable: numbers
+        iterable (Iterable): numbers
 
     Returns:
         tuple: pair of closest numbers
@@ -228,7 +231,7 @@ def farthest_pair(iterable):
     The running time of your program should be linear in the worst case.
 
     Args:
-        iterable: numbers
+        iterable (Iterable): numbers
 
     Returns:
         tuple: pair of farthest numbers
@@ -251,7 +254,7 @@ def local_min(sequence):
     an index i such that a[i-1] < a[i] < a[i+1]. Your program should use ~2lg N compares in the worst case.
 
     Args:
-        sequence: sequence of numbers
+        sequence (Sequence): sequence of numbers
 
     Returns:
         int: index of a local minimum
