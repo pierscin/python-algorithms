@@ -1,4 +1,3 @@
-from copy import copy
 from typing import Sequence
 
 
@@ -36,8 +35,34 @@ def insertion_sort(A: Sequence) -> None:
         A: sequence of comparable objects
     """
     for i in range(1, len(A)):
-        for j in reversed(range(1, i + 1)):
-            if A[j] < A[j - 1]:
-                A[j], A[j - 1] = A[j - 1], A[j]
+        for j in reversed(range(i)):
+            if A[j + 1] < A[j]:
+                A[j + 1], A[j] = A[j], A[j + 1]
             else:
                 break
+
+
+def shell_sort(A: Sequence) -> None:
+    """Shell sort implementation.
+
+    Apply insertion sort for elements with distance h between them. Make h smaller.
+
+    Step is calculated according to h = 3 * h + 1
+
+    Invariants:
+     - elements are h-sorted
+
+    Args:
+        A: sequence of comparable objects
+    """
+
+    h = 1
+    while h < len(A) // 3: h = 3 * h + 1
+    while h > 0:
+        for i in range(h, len(A) + 1 - h):
+            for j in reversed(range(0, i, h)):
+                if A[j + h] < A[j]:
+                    A[j + h], A[j] = A[j], A[j + h]
+                else:
+                    break
+        h //= 3

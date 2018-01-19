@@ -46,6 +46,6 @@ def test_local_min():
     assert local_min([1, -1, 2, -2, 3]) in {1, 3}
 
 
-def test_insertion_is_slower_than_faster_insertion():
+def test_insertion_sort_is_slower_than_its_faster_version():
     benchmarks = running_time_of((faster_insertion_sort, insertion_sort), [[randint(0, 10) for _ in range(100)]], 10)
     assert benchmarks[faster_insertion_sort.__name__].total_time < benchmarks[insertion_sort.__name__].total_time
