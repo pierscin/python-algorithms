@@ -2,10 +2,14 @@
 
 To be more concise, one test is written per one method. This isn't the most readable way and should be refactored later.
 """
+from random import randint
 
 from pytest import approx
 
-from algs4.exercises import insert_left_parentheses, infix_to_postfix, rpn, sorted_intersection, local_min
+from algs4.exercises import insert_left_parentheses, infix_to_postfix, rpn, sorted_intersection, local_min, \
+    faster_insertion_sort
+from algs4.sorts import insertion_sort
+from algs4.utils import running_time_of
 
 
 def test_insert_left_parentheses():
@@ -40,3 +44,8 @@ def test_local_min():
     assert local_min([3, -1, 2, 1]) == 1
     assert local_min([1, -1, 2, -2]) == 1
     assert local_min([1, -1, 2, -2, 3]) in {1, 3}
+
+
+def test_insertion_is_slower_than_faster_insertion():
+    benchmarks = running_time_of((faster_insertion_sort, insertion_sort), [[randint(0, 10) for _ in range(100)]], 10)
+    assert benchmarks[faster_insertion_sort.__name__].total_time < benchmarks[insertion_sort.__name__].total_time

@@ -278,10 +278,10 @@ def local_min(sequence: Sequence) -> int:
     raise ValueError("No local minimum found - sequence doesn't fulfill all assumptions.")
 
 
-def faster_insertion(A: Sequence) -> None:
+def faster_insertion_sort(A: Sequence) -> None:
     """Insertion sort implementation with shorter inner loop.
 
-    For details about insertion sort see: sorts.insertion
+    For details about insertion sort see: sorts.insertion_sort
 
     This method is connected to exercise 2.1.25 (full content below)
 

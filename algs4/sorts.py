@@ -1,7 +1,8 @@
+from copy import copy
 from typing import Sequence
 
 
-def selection(A):
+def selection_sort(A: Sequence) -> None:
     """Selection sort implementation.
 
     Starting from i = 0, find the smallest item in A[i:], exchange it with A[i], increment i.
@@ -15,14 +16,14 @@ def selection(A):
         compares: N^2
 
     Args:
-        A (Sequence): sequence of comparable objects
+        A: sequence of comparable objects
     """
     for i in range(len(A) - 1):
         j = A.index(min(A[i:]), i)
         A[i], A[j] = A[j], A[i]
 
 
-def insertion(A):
+def insertion_sort(A: Sequence) -> None:
     """Insertion sort implementation.
 
     Pick one element and insert it in its place among already sorted part of a sequence (move larger items towards
@@ -32,7 +33,7 @@ def insertion(A):
      - elements in A[0:i - 1] are sorted
 
     Args:
-        A (Sequence): sequence of comparable objects
+        A: sequence of comparable objects
     """
     for i in range(1, len(A)):
         for j in reversed(range(1, i + 1)):

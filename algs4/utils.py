@@ -1,5 +1,6 @@
 import time
-from typing import Sequence, Dict
+from copy import copy
+from typing import Sequence, Dict, Callable, Any
 
 
 class Benchmark:
@@ -10,7 +11,7 @@ class Benchmark:
         self.avg_time = total_time / tries
 
 
-def running_time_of(methods: Sequence, args: Sequence, tries: int) -> Dict[str, Benchmark]:
+def running_time_of(methods: Sequence[Callable], args: Sequence[Any], tries: int) -> Dict[str, Benchmark]:
     """Returns benchmark data for each method listed after specified number of executions and arguments.
 
     Passing methods and args is tricky, because they should always be a sequence even if there's 1 tested method or
@@ -19,9 +20,9 @@ def running_time_of(methods: Sequence, args: Sequence, tries: int) -> Dict[str, 
     Example:
         Tested methods have single, sequence argument. Notice the double brackets.
 
-        >>> from algs4.sorts import selection, insertion
+        >>> from algs4.sorts import selection_sort, insertion_sort
         >>> from random import randint
-        >>> running_time_of((selection, insertion), [[randint(0, 10) for _ in range(100)]], 1000)
+        >>> running_time_of((selection_sort, insertion_sort), [[randint(0, 10) for _ in range(100)]], 1000)
 
     Args:
         methods: sequence of compared methods
@@ -35,8 +36,9 @@ def running_time_of(methods: Sequence, args: Sequence, tries: int) -> Dict[str, 
     for m in methods:
         t = 0
         for _ in range(tries):
+            copy_of_args = list(args)
             s = time.process_time()
-            m(*args)  # TODO: args should be copied
+            m(*copy_of_args)
             e = time.process_time()
             t += e - s
         benchmarks[m.__name__] = Benchmark(m.__name__, t, tries)
