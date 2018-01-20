@@ -1,5 +1,2 @@
 # Python Algorithms
-
-## TODO
-
-- more typing and check `Comparable`
+[![Build Status](https://travis-ci.org/pierscin/python-algorithms.svg?branch=master)](https://travis-ci.org/pierscin/python-algorithms)
