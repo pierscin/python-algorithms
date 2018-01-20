@@ -336,6 +336,7 @@ def int_to_roman(x: int) -> str:
 
     roman = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I']
     arabic = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1]
+
     parts = []
     i = 0
 
@@ -409,3 +410,84 @@ def longest_common_prefix(strs: List[str]) -> str:
         else: break
 
     return ''.join(prefix)
+
+
+def three_sum(nums: List[int]) -> List[List[int]]:
+    """Solves three sum problem.
+
+    Description:
+        https://leetcode.com/problems/3sum/description/
+
+        15. 3Sum
+        Given an array S of n integers, are there elements a, b, c in S such that a + b + c = 0? Find all unique
+        triplets in the array which gives the sum of zero.
+
+        Note: The solution set must not contain duplicate triplets.
+
+    Args:
+        nums: list of integers.
+
+    Returns:
+        List of triplets that sum to 0.
+    """
+    results = []
+    A = sorted(nums)
+
+    i = 0
+    while i < len(A) - 2:
+        l, r = i + 1, len(A) - 1
+
+        while l < r:
+            s = A[i] + A[l] + A[r]
+            if s == 0:
+                results.append([A[i], A[l], A[r]])
+                while l < r and A[r] == A[r - 1]: r -= 1
+                while l < r and A[l] == A[l + 1]: l += 1
+                l, r = l + 1, r - 1
+            elif s > 0:
+                r -= 1
+            else:
+                l += 1
+        while i < len(A) - 2 and A[i] == A[i + 1]: i += 1
+        i += 1
+
+    return results
+
+
+def three_sum_closest(nums: List[int], target: int) -> int:
+    """Finds number which is nearest solution of three sum problem to the specific target.
+
+    Description:
+        https://leetcode.com/problems/3sum-closest/description/
+
+        16. 3Sum Closest
+        Given an array S of n integers, find three integers in S such that the sum is closest to a given number, target.
+        Return the sum of the three integers. You may assume that each input would have exactly one solution.
+
+    Args:
+        nums: list of integers.
+        target: target integer.
+
+    Returns:
+        Number which is nearest to the target after summing one of triplets.
+    """
+    A = sorted(nums)
+    closest = A[0] + A[1] + A[-1]
+
+    i = 0
+    while i < len(A) - 2:
+        l, r = i + 1, len(A) - 1
+
+        while l < r:
+            s = A[i] + A[l] + A[r]
+
+            if s == target: return s
+            else:
+                closest = closest if abs(target - closest) < abs(target - s) else s
+
+            if s < target: l += 1
+            else: r -= 1
+        while i < len(A) - 2 and A[i] == A[i + 1]: i += 1
+        i += 1
+
+    return closest
