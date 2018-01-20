@@ -133,6 +133,45 @@ def longest_palindrome(s: str) -> str:
     return ''.join(p)
 
 
+def convert(s: str, n: int) -> str:
+    """Returns s represented as n-row zig-zag string.
+
+    Description:
+    https://leetcode.com/problems/zigzag-conversion/description/
+
+    6. ZigZag Conversion
+    The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this:
+
+    P   A   H   N
+    A P L S I I G
+    Y   I   R
+
+    And then read line by line: "PAHNAPLSIIGYIR"
+
+    Args:
+        s: string.
+        n: number of rows in zig-zag string.
+
+    Returns:
+        Zig-zag representation of s.
+    """
+    if not s: return ''
+
+    i = 0
+    rows = [[] for _ in range(n)]
+
+    while True:
+        for r in range(n):
+            rows[r].append(s[i])
+            i += 1
+            if i == len(s): return ''.join([''.join(rows[i]) for i in range(n)])
+
+        for r in reversed(range(1, n - 1)):
+            rows[r].append(s[i])
+            i += 1
+            if i == len(s): return ''.join([''.join(rows[i]) for i in range(n)])
+
+
 def reverse(x: int) -> int:
     """Reverses 32-bit int.
 
@@ -216,3 +255,28 @@ def my_atoi(s: str) -> int:
     if result < INT_MIN: return INT_MIN
     if result > INT_MAX: return INT_MAX
     return result
+
+
+def is_palindrome(x: int) -> bool:
+    """Checks whether argument is a palindrome.
+
+    Description:
+        https://leetcode.com/problems/palindrome-number/description/
+
+        9. Palindrome Number
+        Determine whether an integer is a palindrome. Do this without extra space.
+
+    Args:
+        x: integer.
+
+    Returns:
+        Is x a palindrome.
+    """
+    if x < 0 or x > 0 and not x % 10: return False
+
+    reversed_part = 0
+    while x > reversed_part:
+        reversed_part = reversed_part * 10 + x % 10
+        x //= 10
+
+    return x == reversed_part or x == reversed_part // 10
