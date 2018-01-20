@@ -21,6 +21,7 @@ def two_sum(nums: List[int], target: int) -> List[int]:
     Args:
         nums: list of numbers with exactly one solution to the problem.
         target: target number of the two sum.
+
     Returns:
         Indices of the two numbers which add up to a target.
     """
@@ -46,6 +47,7 @@ def add_two_numbers(l1: ListNode, l2: ListNode) -> ListNode:
     Args:
         l1: digits of first number.
         l2: digits of second number.
+
     Returns:
         Added numbers represented as digits in linked list.
     """
@@ -65,3 +67,63 @@ def add_two_numbers(l1: ListNode, l2: ListNode) -> ListNode:
 
     return dummy.next
 
+
+def length_of_longest_substring(s: str) -> int:
+    """Finds length of the longest substring without repeating characters.
+
+    Description:
+        https://leetcode.com/problems/longest-substring-without-repeating-characters/description/
+
+        Given a string, find the length of the longest substring without repeating characters.
+
+    Args:
+        s: string.
+
+    Returns:
+        Length of the longest substring without repeating characters.
+    """
+    if not s: return 0
+
+    L, a_to_i, start_char = 0, {}, s[0]
+
+    for i, c in enumerate(s):
+        if c in a_to_i and a_to_i[c] >= a_to_i[start_char]:
+            L = max(L, i - a_to_i[start_char])
+            start_char = s[a_to_i[c] + 1]
+        a_to_i[c] = i
+
+    return max(L, len(s) - a_to_i[start_char])
+
+
+def longest_palindrome(s: str) -> str:
+    """Finds longest palindromic substring in s.
+
+    Description:
+        https://leetcode.com/problems/longest-palindromic-substring/description/
+
+        Given a string s, find the longest palindromic substring in s. You may assume that the maximum
+        length of s is 1000.
+
+    Args:
+        s: string.
+
+    Returns:
+        Longest palindromic substring in s.
+    """
+
+    if len(s) < 2: return s
+
+    def palindrome_in_s(l: int, r: int) -> str:
+        while l >= 0 and r < len(s) and s[l] == s[r]:
+            l, r = l - 1, r + 1
+        return s[l + 1:r]
+
+    p, s = [], list(s)
+
+    for i in range(len(s)):
+        p = max(palindrome_in_s(i, i),
+                palindrome_in_s(i, i + 1),
+                p,
+                key=len)
+
+    return ''.join(p)
