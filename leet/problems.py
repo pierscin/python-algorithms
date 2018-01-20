@@ -14,6 +14,7 @@ def two_sum(nums: List[int], target: int) -> List[int]:
     Description:
         https://leetcode.com/problems/two-sum/description/
 
+        1. Two Sum
         Given an array of integers, return indices of the two numbers such that they add up to a specific target.
 
         You may assume that each input would have exactly one solution, and you may not use the same element twice.
@@ -39,6 +40,7 @@ def add_two_numbers(l1: ListNode, l2: ListNode) -> ListNode:
     Description:
         https://leetcode.com/problems/add-two-numbers/description/
 
+        2. Add Two Numbers
         You are given two non-empty linked lists representing two non-negative integers. The digits are stored in
         reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
 
@@ -74,6 +76,7 @@ def length_of_longest_substring(s: str) -> int:
     Description:
         https://leetcode.com/problems/longest-substring-without-repeating-characters/description/
 
+        3. Longest Substring Without Repeating Characters
         Given a string, find the length of the longest substring without repeating characters.
 
     Args:
@@ -101,6 +104,7 @@ def longest_palindrome(s: str) -> str:
     Description:
         https://leetcode.com/problems/longest-palindromic-substring/description/
 
+        5. Longest Palindromic Substring
         Given a string s, find the longest palindromic substring in s. You may assume that the maximum
         length of s is 1000.
 
@@ -127,3 +131,88 @@ def longest_palindrome(s: str) -> str:
                 key=len)
 
     return ''.join(p)
+
+
+def reverse(x: int) -> int:
+    """Reverses 32-bit int.
+
+    Description:
+        https://leetcode.com/problems/reverse-integer/description/
+
+        7. Reverse Integer
+        Given a 32-bit signed integer, reverse digits of an integer.
+
+    Args:
+        x: int to reverse.
+
+    Returns:
+        Reversed int within 32-bit bounds or 0 in case of overflow.
+    """
+    INT_MAX = 2147483647
+    INT_MIN = -2147483648
+
+    minus = x < 0
+
+    i = int(''.join(reversed(str(abs(x)))))
+    i = -i if minus else i
+
+    if i > INT_MAX or i < INT_MIN: return 0
+    else: return i
+
+
+def my_atoi(s: str) -> int:
+    """Converts string to integer.
+
+    Absolutely horribly specified problem. 😡😡😡
+
+    Description:
+        https://leetcode.com/problems/string-to-integer-atoi/description/
+
+        8. String to Integer (atoi)
+        Implement atoi to convert a string to an integer.
+
+    Args:
+        s: string.
+
+    Returns:
+        Converted string as int or 0 in case of overflows and invalid conversions.
+
+    """
+    INVALID_CONVERSION = 0
+    INT_MAX = 2147483647
+    INT_MIN = -2147483648
+
+    s = s.strip()
+
+    # check validity
+    if not s or not (s[0] in {'-', '+'} or s[0].isdigit()): return INVALID_CONVERSION
+
+    # strip '-' or '+'
+    minus = s[0] == '-'
+    if s[0] in {'-', '+'}: s = s[1:]
+
+    if not s: return INVALID_CONVERSION
+
+    # strip zeros
+    i = 0
+    while i < len(s) and s[i] == '0':
+        i += 1
+
+    s = s[i:]
+
+    if not s: return INVALID_CONVERSION
+
+    # parse int
+    i = 0
+    while i < len(s) and s[i].isdigit():
+        i += 1
+        if i > 10: return INT_MIN if minus else INT_MAX
+
+    if i == 0: return INVALID_CONVERSION
+
+    result = -int(s[:i]) if minus else int(s[:i])
+
+    # check bounds
+    if result < INT_MIN: return INT_MIN
+    if result > INT_MAX: return INT_MAX
+    return result
