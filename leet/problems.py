@@ -380,3 +380,32 @@ def roman_to_int(s: str) -> int:
         else: i += 1
 
     return x
+
+
+def longest_common_prefix(strs: List[str]) -> str:
+    """Calculates longest common prefix from provided list of strings.
+
+    Description:
+        https://leetcode.com/problems/longest-common-prefix/description/
+
+        14. Longest Common Prefix
+        Write a function to find the longest common prefix string amongst an array of strings.
+    Args:
+        strs: list of strings to check.
+
+    Returns:
+        Longest common prefix
+    """
+    if not strs: return ''
+    if len(strs) == 1: return strs[0]
+
+    strs.sort()
+
+    first, last = strs[0], strs[-1]
+    prefix = []
+
+    for i in range(1, len(first) + 1):
+        if last.startswith(first[:i]): prefix.append(first[i - 1])
+        else: break
+
+    return ''.join(prefix)
