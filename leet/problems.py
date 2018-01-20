@@ -3,6 +3,7 @@
 Module consists of methods which DO NOT match signatures in problem description - there is no Solution object and types.
 
 """
+import itertools
 from typing import List
 
 from leet.utils import ListNode
@@ -485,9 +486,55 @@ def three_sum_closest(nums: List[int], target: int) -> int:
             else:
                 closest = closest if abs(target - closest) < abs(target - s) else s
 
-            if s < target: l += 1
-            else: r -= 1
+            if s < target:
+                while l < r and A[l] == A[l + 1]: l += 1
+                l += 1
+            else:
+                while l < r and A[r] == A[r - 1]: r -= 1
+                r -= 1
         while i < len(A) - 2 and A[i] == A[i + 1]: i += 1
         i += 1
 
     return closest
+
+
+def letter_combinations(digits: str) -> List[str]:
+    """Returns all possible letter representations of a phone number.
+
+    Description:
+        https://leetcode.com/problems/letter-combinations-of-a-phone-number/description/
+
+        17. Letter Combinations of a Phone Number
+        Given a digit string, return all possible letter combinations that the number could represent.
+
+        A mapping of digit to letters (just like on the telephone buttons) is given below.
+
+        ---------
+        | PHONE |
+        | IMAGE |
+        |   😉  |
+        ---------
+
+    Args:
+        digits: digits in a number.
+
+    Returns:
+        List of all possible letter combinations from chosen digits.
+
+    """
+    if '' == digits: return []
+
+    digits_to_letters = {
+        '2': 'abc',
+        '3': 'def',
+        '4': 'ghi',
+        '5': 'jkl',
+        '6': 'mno',
+        '7': 'pqrs',
+        '8': 'tuv',
+        '9': 'wxyz'
+    }
+
+    possible_letters = [digits_to_letters[d] for d in digits]
+
+    return list(''.join(p) for p in itertools.product(*possible_letters))
