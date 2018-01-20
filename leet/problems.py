@@ -215,7 +215,6 @@ def my_atoi(s: str) -> int:
 
     Returns:
         Converted string as int or 0 in case of overflows and invalid conversions.
-
     """
     INVALID_CONVERSION = 0
     INT_MAX = 2147483647
@@ -280,3 +279,104 @@ def is_palindrome(x: int) -> bool:
         x //= 10
 
     return x == reversed_part or x == reversed_part // 10
+
+
+def max_area(heights: List[int]) -> int:
+    """Calculate container with most water based on heights of containers.
+
+    Description:
+        https://leetcode.com/problems/container-with-most-water/description/
+
+        11. Container With Most Water
+        Given n non-negative integers a1, a2, ..., an, where each represents a point at coordinate (i, ai).
+        n vertical lines are drawn such that the two endpoints of line i is at (i, ai) and (i, 0).
+        Find two lines, which together with x-axis forms a container, such that the container contains the most water.
+
+        Note: You may not slant the container and n is at least 2.
+
+    Args:
+        heights: list with container heights
+
+    Returns:
+        Surface of the biggest possible container.
+    """
+    l, r, max_s = 0, len(heights) - 1, 0
+
+    while l < r:
+        d = r - l
+        L, R = heights[l], heights[r]
+
+        s = min(L, R) * d
+        max_s = max(max_s, s)
+
+        if L < R: l += 1
+        else: r -= 1
+
+    return max_s
+
+
+def int_to_roman(x: int) -> str:
+    """Converts int to roman numeral.
+
+    Description:
+        https://leetcode.com/problems/integer-to-roman/description/
+
+        12. Integer to Roman
+        Given an integer, convert it to a roman numeral.
+
+        Input is guaranteed to be within the range from 1 to 3999.
+
+    Args:
+        x: number.
+
+    Returns:
+        x converted to roman numeral.
+    """
+    if x == 0: return ''
+
+    roman = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I']
+    arabic = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1]
+    parts = []
+    i = 0
+
+    while x > 0:
+        if x >= arabic[i]:
+            parts.append(roman[i])
+            x -= arabic[i]
+        else: i += 1
+
+    return ''.join(parts)
+
+
+def roman_to_int(s: str) -> int:
+    """Converts roman numeral to integer.
+
+    Description:
+        https://leetcode.com/problems/roman-to-integer/description/
+
+        13. Roman to Integer
+        Given a roman numeral, convert it to an integer.
+
+        Input is guaranteed to be within the range from 1 to 3999.
+
+    Args:
+        s: roman numeral.
+
+    Returns:
+        s converted to int.
+    """
+    if s == '': return 0
+
+    roman = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I']
+    arabic = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1]
+
+    x = 0
+    start_idx = i = 0
+
+    while start_idx < len(s):
+        if s.startswith(roman[i], start_idx):
+            start_idx += len(roman[i])
+            x += arabic[i]
+        else: i += 1
+
+    return x
