@@ -601,3 +601,43 @@ def four_sum(nums: List[int], target: int) -> List[List[int]]:
         List of solutions without duplicates
     """
     return n_sum(4, nums, target)
+
+
+def remove_nth_from_end(head: ListNode, n: int) -> ListNode:
+    """Removes nth list node counting from tail.
+
+    Description:
+        https://leetcode.com/problems/remove-nth-node-from-end-of-list/description/
+
+        19. Remove Nth Node From End of List
+        Given a linked list, remove the nth node from the end of list and return its head.
+
+        For example:
+           Given linked list: 1->2->3->4->5, and n = 2.
+           After removing the second node from the end, the linked list becomes 1->2->3->5.
+
+        Note:
+        Given n will always be valid.
+        Try to do this in one pass.
+
+    Args:
+        head: head of list.
+        n: number of node (counting from tail) to remove.
+
+    Returns:
+        Head of the modified list.
+    """
+    faster = slower = head
+
+    for _ in range(n):
+        faster = faster.next
+
+    if faster is None: return head.next
+
+    while faster.next:
+        faster = faster.next
+        slower = slower.next
+
+    slower.next = slower.next.next
+
+    return head

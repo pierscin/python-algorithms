@@ -3,8 +3,10 @@
 Sanity checks for some of the solved problems. This isn't great practice, but to be more concise ONLY ONE test method
 per problem is present.
 """
+from copy import deepcopy
 
-from leet.problems import four_sum
+from leet.problems import four_sum, remove_nth_from_end
+from leet.utils import LeetList
 
 
 def test_four_sum():
@@ -33,3 +35,20 @@ def test_four_sum():
     target = very_low_value
     assert sum(S[-4:]) > target
     assert [sorted(res) for res in four_sum(nums=S, target=target)] == []
+
+
+def test_remove_nth_node():
+    singleton_list = [1]
+    assert remove_nth_from_end(LeetList(singleton_list).head, 1) is None
+
+    some_list = list(range(5))
+    linked_list = LeetList(some_list).head
+
+    removed_second_last = LeetList(some_list[:-2] + some_list[-1:]).head
+    assert remove_nth_from_end(deepcopy(linked_list), 2) == removed_second_last
+
+    removed_tail = LeetList(some_list[:-1]).head
+    assert remove_nth_from_end(deepcopy(linked_list), 1) == removed_tail
+
+    removed_head = LeetList(some_list[1:]).head
+    assert remove_nth_from_end(deepcopy(linked_list), 5) == removed_head
