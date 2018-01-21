@@ -138,14 +138,14 @@ def convert(s: str, n: int) -> str:
     """Returns s represented as n-row zig-zag string.
 
     Description:
-    https://leetcode.com/problems/zigzag-conversion/description/
+        https://leetcode.com/problems/zigzag-conversion/description/
 
-    6. ZigZag Conversion
-    The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this:
+        6. ZigZag Conversion
+        The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this:
 
-    P   A   H   N
-    A P L S I I G
-    Y   I   R
+        P   A   H   N
+        A P L S I I G
+        Y   I   R
 
     And then read line by line: "PAHNAPLSIIGYIR"
 
@@ -538,3 +538,66 @@ def letter_combinations(digits: str) -> List[str]:
     possible_letters = [digits_to_letters[d] for d in digits]
 
     return list(''.join(p) for p in itertools.product(*possible_letters))
+
+
+def n_sum(n: int, nums: List[int], target: int) -> List[List[int]]:
+    """Returns list of lists of N numbers which sum to specified target.
+
+    Args:
+        n: order of problem.
+        nums: list of integers to search through.
+        target: target number to sum numbers to.
+
+    Returns:
+        List of solutions without duplicates
+    """
+
+    def _n_sum(n: int, partial: List[int], target: int, start: int) -> None:
+        if sum(A[start:start + n]) > target or sum(A[-n:]) < target: return
+
+        if n == 2:
+            l, r = start, N - 1
+            while l < r:
+                s = A[l] + A[r]
+                if s == target:
+                    results.append(partial + [A[l], A[r]])
+                    while l < r and A[r] == A[r - 1]: r -= 1
+                    while l < r and A[l] == A[l + 1]: l += 1
+                    l, r = l + 1, r - 1
+                elif s > target:
+                    r -= 1
+                else:
+                    l += 1
+        else:
+            for i in range(start, N - n + 1):
+                if i == start or i > start and A[i - 1] != A[i]:  # pierscin: no duplicates without usage of set
+                    _n_sum(n - 1, partial + [A[i]], target - A[i], i + 1)
+
+    A = sorted(nums)
+    N = len(A)
+    results = []
+
+    _n_sum(n, [], target, 0)
+    return results
+
+
+def four_sum(nums: List[int], target: int) -> List[List[int]]:
+    """Returns list of quadruplets which sum to specified target.
+
+    Description:
+        https://leetcode.com/problems/4sum/description/
+
+        18. 4Sum
+        Given an array S of n integers, are there elements a, b, c, and d in S such that a + b + c + d = target?
+        Find all unique quadruplets in the array which gives the sum of target.
+
+        Note: The solution set must not contain duplicate quadruplets.
+
+    Args:
+        nums: list of integers to search through.
+        target: target number to sum numbers to.
+
+    Returns:
+        List of solutions without duplicates
+    """
+    return n_sum(4, nums, target)
