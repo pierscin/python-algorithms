@@ -201,7 +201,7 @@ def reverse(x: int) -> int:
     else: return i
 
 
-def my_atoi(s: str) -> int:
+def atoi(s: str) -> int:
     """Converts string to integer.
 
     Absolutely horribly specified problem. 😡😡😡
@@ -712,3 +712,44 @@ def merge_two_sorted_lists(l1: ListNode, l2: ListNode) -> Union[ListNode, None]:
         node, l2 = node.next, l2.next
 
     return dummy.next
+
+
+def generate_parenthesis(n: int) -> List[str]:
+    """Generate all possible valid n pairs of parenthesis.
+
+    Description:
+        https://leetcode.com/problems/generate-parentheses/description/
+
+        22. Generate Parentheses
+        Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
+
+        For example, given n = 3, a solution set is:
+        [
+          "((()))",
+          "(()())",
+          "(())()",
+          "()(())",
+          "()()()"
+        ]
+
+    Args:
+        n: how many pairs of parenthesis in results.
+
+    Returns:
+        All possible valid n pairs of parenthesis in a list
+    """
+    def _generate(current, left, right):
+        if right > left: return
+
+        if right == left == n: results.append(''.join(current))
+        else:
+            if left < n: _generate(current + ['('], left + 1, right)
+            if right < n: _generate(current + [')'], left, right + 1)
+
+    results = []
+
+    _generate([], 0, 0)
+
+    return results
+
+print(generate_parenthesis(6))

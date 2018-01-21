@@ -6,7 +6,8 @@ per problem is present.
 from copy import deepcopy
 from random import randint
 
-from leet.problems import four_sum, remove_nth_from_end, are_parentheses_balanced, merge_two_sorted_lists
+from leet.problems import four_sum, remove_nth_from_end, are_parentheses_balanced, merge_two_sorted_lists, \
+    generate_parenthesis
 from leet.utils import ListNode
 
 
@@ -76,3 +77,16 @@ def test_merge_two_sorted_lists():
 
     l1, l2 = sorted(random_list[:point_of_slicing]), sorted(random_list[point_of_slicing:])
     assert merge_two_sorted_lists(ListNode.from_list(l1), ListNode.from_list(l2)).to_list() == sorted(l1 + l2)
+
+
+def test_generate_parenthesis():
+    assert generate_parenthesis(0) == ['']
+    assert generate_parenthesis(1) == ['()']
+
+    generated = generate_parenthesis(3)
+    expected_parenthesis = {"((()))", "(()())", "(())()", "()(())", "()()()"}
+
+    assert len(generated) == len(expected_parenthesis)
+
+    for pair in generated:
+        assert pair in expected_parenthesis
