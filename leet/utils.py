@@ -22,14 +22,23 @@ class ListNode:
 
         return temp is None and other_temp is None
 
-
-class LeetList:
-    def __init__(self, l):
+    # TODO: typing
+    @staticmethod
+    def from_list(l):
         dummy = ListNode(None)
-        current = dummy
+        node = dummy
+
         for e in l:
-            current.next = ListNode(e)
-            current = current.next
-        self.head = dummy.next
+            node.next = ListNode(e)
+            node = node.next
+        return dummy.next
 
+    def to_list(self):
+        values = []
 
+        node = self
+        while node:
+            values.append(node.val)
+            node = node.next
+
+        return values

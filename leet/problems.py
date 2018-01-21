@@ -4,7 +4,7 @@ Module consists of methods which DO NOT match signatures in problem description 
 
 """
 import itertools
-from typing import List
+from typing import List, Union
 
 from leet.utils import ListNode
 
@@ -43,7 +43,8 @@ def add_two_numbers(l1: ListNode, l2: ListNode) -> ListNode:
 
         2. Add Two Numbers
         You are given two non-empty linked lists representing two non-negative integers. The digits are stored in
-        reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
+        reverse order and each of their nodes contain a single digit.
+        Add the two numbers and return it as a linked list.
 
         You may assume the two numbers do not contain any leading zero, except the number 0 itself.
 
@@ -603,7 +604,7 @@ def four_sum(nums: List[int], target: int) -> List[List[int]]:
     return n_sum(4, nums, target)
 
 
-def remove_nth_from_end(head: ListNode, n: int) -> ListNode:
+def remove_nth_from_end(head: ListNode, n: int) -> Union[ListNode, None]:
     """Removes nth list node counting from tail.
 
     Description:
@@ -625,7 +626,7 @@ def remove_nth_from_end(head: ListNode, n: int) -> ListNode:
         n: number of node (counting from tail) to remove.
 
     Returns:
-        Head of the modified list.
+        Head of the modified list or None when the only element in singleton list was removed.
     """
     faster = slower = head
 
@@ -641,3 +642,73 @@ def remove_nth_from_end(head: ListNode, n: int) -> ListNode:
     slower.next = slower.next.next
 
     return head
+
+
+def are_parentheses_balanced(s: str) -> bool:
+    """Check whether brackets in string are balanced.
+
+    Description:
+        https://leetcode.com/problems/valid-parentheses/description/
+
+        20. Valid Parentheses
+        Given a string containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input
+        string is valid.
+
+        The brackets must close in the correct order, "()" and "()[]{}" are all valid but "(]" and "([)]" are not.
+
+    Args:
+        s: string consisting of brackets only.
+
+    Returns:
+        True when input is valid, False otherwise.
+    """
+    stack = []
+
+    left = {'(', '[', '{'}
+    right_to_left = {')': '(', ']': '[', '}': '{'}
+
+    for c in s:
+        if c in left: stack.append(c)
+        elif c in right_to_left and stack and stack[-1] == right_to_left[c]: stack.pop()
+        else: return False
+    return not stack
+
+
+def merge_two_sorted_lists(l1: ListNode, l2: ListNode) -> Union[ListNode, None]:
+    """Merges two sorted lists into the new one which is sorted.
+
+    Description:
+        https://leetcode.com/problems/merge-two-sorted-lists/description/
+
+        21. Merge Two Sorted Lists
+        Merge two sorted linked lists and return it as a new list. The new list should be made by splicing together
+        the nodes of the first two lists.
+
+    Args:
+        l1: sorted list
+        l2: sorted list
+
+    Returns:
+        Merged list in sorted order or None when both lists were empty.
+    """
+
+    dummy = node = ListNode(None)
+
+    while l1 and l2:
+        val = min(l1.val, l2.val)
+
+        if l1.val < l2.val: l1 = l1.next
+        else: l2 = l2.next
+
+        node.next = ListNode(val)
+        node = node.next
+
+    while l1:
+        node.next = ListNode(l1.val)
+        node, l1 = node.next, l1.next
+
+    while l2:
+        node.next = ListNode(l2.val)
+        node, l2 = node.next, l2.next
+
+    return dummy.next

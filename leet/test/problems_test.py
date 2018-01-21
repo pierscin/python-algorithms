@@ -4,9 +4,10 @@ Sanity checks for some of the solved problems. This isn't great practice, but to
 per problem is present.
 """
 from copy import deepcopy
+from random import randint
 
-from leet.problems import four_sum, remove_nth_from_end
-from leet.utils import LeetList
+from leet.problems import four_sum, remove_nth_from_end, are_parentheses_balanced, merge_two_sorted_lists
+from leet.utils import ListNode
 
 
 def test_four_sum():
@@ -39,16 +40,39 @@ def test_four_sum():
 
 def test_remove_nth_node():
     singleton_list = [1]
-    assert remove_nth_from_end(LeetList(singleton_list).head, 1) is None
+    assert remove_nth_from_end(ListNode.from_list(singleton_list), 1) is None
 
     some_list = list(range(5))
-    linked_list = LeetList(some_list).head
+    linked_list = ListNode.from_list(some_list)
 
-    removed_second_last = LeetList(some_list[:-2] + some_list[-1:]).head
+    removed_second_last = ListNode.from_list(some_list[:-2] + some_list[-1:])
     assert remove_nth_from_end(deepcopy(linked_list), 2) == removed_second_last
 
-    removed_tail = LeetList(some_list[:-1]).head
+    removed_tail = ListNode.from_list(some_list[:-1])
     assert remove_nth_from_end(deepcopy(linked_list), 1) == removed_tail
 
-    removed_head = LeetList(some_list[1:]).head
+    removed_head = ListNode.from_list(some_list[1:])
     assert remove_nth_from_end(deepcopy(linked_list), 5) == removed_head
+
+
+def test_are_parentheses_balanced():
+    assert are_parentheses_balanced('')
+    assert not are_parentheses_balanced('(')
+    assert not are_parentheses_balanced(']')
+    assert are_parentheses_balanced('{}')
+    assert not are_parentheses_balanced('({)}')
+    assert not are_parentheses_balanced('({}')
+    assert are_parentheses_balanced("[({(())}[()])]")
+
+
+def test_merge_two_sorted_lists():
+    assert merge_two_sorted_lists(ListNode.from_list([]), ListNode.from_list([])) is None
+    assert merge_two_sorted_lists(ListNode.from_list([1]), ListNode.from_list([])) == ListNode.from_list([1])
+    assert merge_two_sorted_lists(ListNode.from_list([]), ListNode.from_list([1])) == ListNode.from_list([1])
+
+    size = 30
+    random_list = [randint(0, 10) for _ in range(size)]
+    point_of_slicing = randint(0, size)
+
+    l1, l2 = sorted(random_list[:point_of_slicing]), sorted(random_list[point_of_slicing:])
+    assert merge_two_sorted_lists(ListNode.from_list(l1), ListNode.from_list(l2)).to_list() == sorted(l1 + l2)
