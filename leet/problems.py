@@ -809,12 +809,65 @@ def remove_duplicates(A: List[int]) -> int:
     """
     if not A: return 0
 
-    end = 0
+    L = 0
 
     for i in range(1, len(A)):
-        if A[i] != A[end]:
-            end += 1
-            A[end] = A[i]
+        if A[i] != A[L]:
+            L += 1
+            A[L] = A[i]
 
-    return end + 1
+    return L + 1
 
+
+def remove_element(A: List[int], x: int) -> int:
+    """"Removes" all occurrences of x in A and returns new length of modified list A.
+
+    Description:
+        https://leetcode.com/problems/remove-element/description/
+
+        27. Remove Element
+        Given an array and a value, remove all instances of that value in-place and return the new length.
+
+        Do not allocate extra space for another array, you must do this by modifying the input array in-place
+        with O(1) extra memory.
+
+        The order of elements can be changed. It doesn't matter what you leave beyond the new length.
+
+    Args:
+        A: list to search x in.
+        x: searched number.
+
+    Returns:
+        Length of modified A with all x elements removed.
+    """
+    if not A: return 0
+
+    L = 0
+
+    for i in range(len(A)):
+        if A[i] != x:
+            A[L] = A[i]
+            L += 1
+
+    return L
+
+
+def str_str(haystack: str, needle: str) -> int:
+    """Finds index of needle in haystack.
+
+    Description:
+        https://leetcode.com/problems/implement-strstr/description/
+
+        28. Implement strStr()
+        Implement strStr().
+
+        Return the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.
+
+    Args:
+        haystack: searched string.
+        needle: string to look for.
+
+    Returns:
+        Index of needle in haystack, -1 when not found
+    """
+    return haystack.find(needle)
