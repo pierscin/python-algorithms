@@ -7,7 +7,7 @@ from copy import deepcopy
 from random import randint
 
 from leet.problems import four_sum, remove_nth_from_end, are_parentheses_balanced, merge_two_sorted_lists, \
-    generate_parenthesis
+    generate_parenthesis, swap_pairs
 from leet.utils import ListNode
 
 
@@ -67,7 +67,6 @@ def test_are_parentheses_balanced():
 
 
 def test_merge_two_sorted_lists():
-    assert merge_two_sorted_lists(ListNode.from_list([]), ListNode.from_list([])) is None
     assert merge_two_sorted_lists(ListNode.from_list([1]), ListNode.from_list([])) == ListNode.from_list([1])
     assert merge_two_sorted_lists(ListNode.from_list([]), ListNode.from_list([1])) == ListNode.from_list([1])
 
@@ -90,3 +89,10 @@ def test_generate_parenthesis():
 
     for pair in generated:
         assert pair in expected_parenthesis
+
+
+def test_swap_pairs():
+    assert swap_pairs(ListNode.from_list([1])).to_list() == [1]
+    assert swap_pairs(ListNode.from_list([1, 2])).to_list() == [2, 1]
+    assert swap_pairs(ListNode.from_list([1, 2, 3])).to_list() == [2, 1, 3]
+    assert swap_pairs(ListNode.from_list([1, 2, 3, 4])).to_list() == [2, 1, 4, 3]

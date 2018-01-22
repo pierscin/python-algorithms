@@ -4,7 +4,7 @@ Module consists of methods which DO NOT match signatures in problem description 
 
 """
 import itertools
-from typing import List, Union
+from typing import List
 
 from leet.utils import ListNode
 
@@ -604,7 +604,7 @@ def four_sum(nums: List[int], target: int) -> List[List[int]]:
     return n_sum(4, nums, target)
 
 
-def remove_nth_from_end(head: ListNode, n: int) -> Union[ListNode, None]:
+def remove_nth_from_end(head: ListNode, n: int) -> ListNode:
     """Removes nth list node counting from tail.
 
     Description:
@@ -674,7 +674,7 @@ def are_parentheses_balanced(s: str) -> bool:
     return not stack
 
 
-def merge_two_sorted_lists(l1: ListNode, l2: ListNode) -> Union[ListNode, None]:
+def merge_two_sorted_lists(l1: ListNode, l2: ListNode) -> ListNode:
     """Merges two sorted lists into the new one which is sorted.
 
     Description:
@@ -751,3 +751,38 @@ def generate_parenthesis(n: int) -> List[str]:
     _generate([], 0, 0)
 
     return results
+
+
+def swap_pairs(head: ListNode) -> ListNode:
+    """Swaps all nodes of a list in-place.
+
+    Description:
+        https://leetcode.com/problems/swap-nodes-in-pairs/description/
+
+        24. Swap Nodes in Pairs
+        Given a linked list, swap every two adjacent nodes and return its head.
+
+        For example,
+        Given 1->2->3->4, you should return the list as 2->1->4->3.
+
+        Your algorithm should use only constant space. You may not modify the values in the list,
+        only nodes itself can be changed.
+
+    Args:
+        head: head of list to modify.
+
+    Returns:
+        Head to modified list.
+    """
+    dummy = node = ListNode(None)
+    node.next = head
+
+    while node.next and node.next.next:
+        first = node.next
+        second = node.next.next
+
+        node.next, second.next, first.next = second, first, second.next
+
+        node = first
+
+    return dummy.next

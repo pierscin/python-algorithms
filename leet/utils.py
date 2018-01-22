@@ -25,8 +25,7 @@ class ListNode:
     # TODO: typing
     @staticmethod
     def from_list(l):
-        dummy = ListNode(None)
-        node = dummy
+        dummy = node = ListNode(None)
 
         for e in l:
             node.next = ListNode(e)
