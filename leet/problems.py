@@ -751,5 +751,3 @@ def generate_parenthesis(n: int) -> List[str]:
     _generate([], 0, 0)
 
     return results
-
-print(generate_parenthesis(6))
