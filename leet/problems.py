@@ -786,3 +786,35 @@ def swap_pairs(head: ListNode) -> ListNode:
         node = first
 
     return dummy.next
+
+
+def remove_duplicates(A: List[int]) -> int:
+    """"Removes" duplicates from a list and returns length of a list with unique integers.
+
+    Description:
+        https://leetcode.com/problems/remove-duplicates-from-sorted-array/description/
+
+        26. Remove Duplicates from Sorted Array
+        Given a sorted array, remove the duplicates in-place such that each element appear only once
+        and return the new length.
+
+        Do not allocate extra space for another array, you must do this by modifying the input array in-place
+        with O(1) extra memory.
+
+    Args:
+        A: sorted list of integers
+
+    Returns:
+        Length of a list with unique integers.
+    """
+    if not A: return 0
+
+    end = 0
+
+    for i in range(1, len(A)):
+        if A[i] != A[end]:
+            end += 1
+            A[end] = A[i]
+
+    return end + 1
+

@@ -7,7 +7,7 @@ from copy import deepcopy
 from random import randint
 
 from leet.problems import four_sum, remove_nth_from_end, are_parentheses_balanced, merge_two_sorted_lists, \
-    generate_parenthesis, swap_pairs
+    generate_parenthesis, swap_pairs, remove_duplicates
 from leet.utils import ListNode
 
 
@@ -96,3 +96,15 @@ def test_swap_pairs():
     assert swap_pairs(ListNode.from_list([1, 2])).to_list() == [2, 1]
     assert swap_pairs(ListNode.from_list([1, 2, 3])).to_list() == [2, 1, 3]
     assert swap_pairs(ListNode.from_list([1, 2, 3, 4])).to_list() == [2, 1, 4, 3]
+
+
+def test_remove_duplicates():
+    for A in [
+        [],
+        [1],
+        [1, 1, 2],
+        [1, 1, 2, 2, 3],
+        [1, 1, 2, 2, 2, 2, 2, 2, 2, 2],
+        [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4]
+    ]:
+        assert remove_duplicates(A) == len(set(A))
