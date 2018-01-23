@@ -1,3 +1,6 @@
+from typing import List, Any
+
+
 class ListNode:
     def __init__(self, x):
         self.val = x
@@ -22,9 +25,8 @@ class ListNode:
 
         return temp is None and other_temp is None
 
-    # TODO: typing
     @staticmethod
-    def from_list(l):
+    def from_list(l: List[Any]) -> 'ListNode':
         dummy = node = ListNode(None)
 
         for e in l:
@@ -32,7 +34,7 @@ class ListNode:
             node = node.next
         return dummy.next
 
-    def to_list(self):
+    def to_list(self) -> List[Any]:
         values = []
 
         node = self
