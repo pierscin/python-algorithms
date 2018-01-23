@@ -7,7 +7,7 @@ from copy import deepcopy
 from random import randint
 
 from leet.problems import four_sum, remove_nth_from_end, are_parentheses_balanced, merge_two_sorted_lists, \
-    generate_parenthesis, swap_pairs, remove_duplicates, next_permutation, divide
+    generate_parenthesis, swap_pairs, remove_duplicates, next_permutation, divide, search
 from leet.utils import ListNode
 
 
@@ -136,3 +136,18 @@ def test_next_permutation():
     ):
         next_permutation(A)
         assert A == RESULT
+
+
+def test_search():
+    for A, x in (
+        ([1], 1),
+        ([1, 3], 3),
+        ([3, 1], 3),
+        ([3, 4, 5, 0, 1, 2], 1)
+    ):
+        assert search(A, x) == A.index(x)
+
+    NOT_FOUND = -1
+
+    assert search([1, 3], 0) == NOT_FOUND
+    assert search([], 0) == NOT_FOUND

@@ -3,6 +3,7 @@
 Module consists of methods which DO NOT match signatures in problem description - there is no Solution object and types.
 
 """
+from bisect import bisect
 from itertools import product
 from typing import List
 
@@ -949,3 +950,76 @@ def next_permutation(A: List[int]) -> None:
             break
 
     A[k + 1:] = list(reversed(A[k + 1:]))
+
+
+def search(A: List[int], x: int) -> int:
+    """Returns index of x in sorted (but could be rotated by n) list.
+
+    Description:
+        https://leetcode.com/problems/search-in-rotated-sorted-array/description/
+
+        33. Search in Rotated Sorted Array
+        Suppose an array sorted in ascending order is rotated at some pivot unknown to you beforehand.
+        (i.e., 0 1 2 4 5 6 7 might become 4 5 6 7 0 1 2).
+
+        You are given a target value to search. If found in the array return its index, otherwise return -1.
+        You may assume no duplicate exists in the array.
+
+    Args:
+        A: sorted and optionally rotated list.
+        x: target.
+
+    Returns:
+        Index of x or -1 when not found.
+    """
+    NOT_FOUND = -1
+
+    if not A: return NOT_FOUND
+
+    N = len(A)
+    lo, hi = 0, N - 1
+
+    while lo != hi:
+        mid = (lo + hi) // 2
+
+        if A[mid] > A[hi]: lo = mid + 1
+        else: hi = mid
+
+    rot = lo
+
+    lo, hi = 0, N - 1
+
+    while lo <= hi:
+        mid = (lo + hi) // 2
+        r_mid = (mid + rot) % N
+
+        if A[r_mid] == x: return r_mid
+        elif A[r_mid] > x: hi = mid - 1
+        else: lo = mid + 1
+
+    return NOT_FOUND
+
+
+def search_insert(A: List[int], x: int) -> int:
+    """Searches insertion point for x in sorted list A, so that A remains sorted after it.
+
+    More generic version of this problem (with duplicates) is often referred to as "upper bound".
+
+    Descriptions:
+        https://leetcode.com/problems/search-insert-position/description/
+
+        35. Search Insert Position
+        Given a sorted array and a target value, return the index if the target is found. If not, return the index
+        where it would be if it were inserted in order.
+
+        You may assume no duplicates in the array.
+
+    Args:
+        A: sorted list.
+        x: target value.
+
+    Returns:
+        Index to insert x, so that A remains sorted.
+    """
+    i = bisect(A, x)
+    return i - 1 if A[i - 1] == x else i  # pierscin: when i == 0 the A[-1] is checked, but array is sorted, so it works
