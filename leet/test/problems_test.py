@@ -7,7 +7,7 @@ from copy import deepcopy
 from random import randint
 
 from leet.problems import four_sum, remove_nth_from_end, are_parentheses_balanced, merge_two_sorted_lists, \
-    generate_parenthesis, swap_pairs, remove_duplicates
+    generate_parenthesis, swap_pairs, remove_duplicates, next_permutation, divide
 from leet.utils import ListNode
 
 
@@ -108,3 +108,31 @@ def test_remove_duplicates():
         [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4]
     ]:
         assert remove_duplicates(A) == len(set(A))
+
+
+def test_divide():
+    MIN_INT, MAX_INT = -2147483648, 2147483647
+
+    for a, b in (
+        (0, 1),
+        (1, 1),
+        (MIN_INT, 1),
+        (MIN_INT + 1, -1),
+        (randint(100000, 1000000), randint(2, 10))
+    ):
+        assert divide(a, b) == a // b
+
+    assert divide(MIN_INT, -1) == MAX_INT
+
+
+def test_next_permutation():
+    for A, RESULT in (
+        ([], []),
+        ([1], [1]),
+        ([1, 2, 3], [1, 3, 2]),
+        ([3, 2, 1], [1, 2, 3]),
+        ([1, 1, 5], [1, 5, 1]),
+        ([6, 7, 5, 3, 5, 6, 2, 9, 1, 2, 7, 0, 9], [6, 7, 5, 3, 5, 6, 2, 9, 1, 2, 7, 9, 0])
+    ):
+        next_permutation(A)
+        assert A == RESULT

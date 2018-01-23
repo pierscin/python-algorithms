@@ -3,7 +3,7 @@
 Module consists of methods which DO NOT match signatures in problem description - there is no Solution object and types.
 
 """
-import itertools
+from itertools import product
 from typing import List
 
 from leet.utils import ListNode
@@ -538,7 +538,7 @@ def letter_combinations(digits: str) -> List[str]:
 
     possible_letters = [digits_to_letters[d] for d in digits]
 
-    return list(''.join(p) for p in itertools.product(*possible_letters))
+    return list(''.join(p) for p in product(*possible_letters))
 
 
 def n_sum(n: int, nums: List[int], target: int) -> List[List[int]]:
@@ -871,3 +871,81 @@ def str_str(haystack: str, needle: str) -> int:
         Index of needle in haystack, -1 when not found
     """
     return haystack.find(needle)
+
+
+def divide(dividend: int, divisor: int) -> int:
+    """Divides two 32-bit integers WITHOUT using *, / and % operators.
+
+    Description:
+        https://leetcode.com/problems/divide-two-integers/description/
+
+        29. Divide Two Integers
+        Divide two integers without using multiplication, division and mod operator.
+
+        If it is overflow, return MAX_INT.
+
+    Args:
+        dividend: int
+        divisor: int
+
+    Returns:
+        Signed 32-bit result of integer division
+
+    """
+
+    MIN_INT, MAX_INT = -2147483648, 2147483647
+
+    if dividend == 0 or abs(divisor) > abs(dividend): return 0
+
+    if divisor == 1: return dividend
+    if divisor == -1:
+        if dividend == MIN_INT: return MAX_INT
+        return -dividend
+
+    positive = dividend < 0 and divisor < 0 or dividend > 0 and divisor > 0
+
+    divisor, dividend = abs(divisor), abs(dividend)
+
+    res = 0
+
+    while dividend >= divisor:
+        power = 0
+        while dividend > divisor << power + 1:
+            power += 1
+        dividend -= divisor << power
+        res += 1 << power
+    return res if positive else -res
+
+
+def next_permutation(A: List[int]) -> None:
+    """Finds next permutation of integers in A and modifies this list to reflect it.
+
+    https://en.wikipedia.org/wiki/Permutation#Generation_in_lexicographic_order
+
+    Description:
+        https://leetcode.com/problems/next-permutation/description/
+
+        31. Next Permutation
+        Implement next permutation, which rearranges numbers into the lexicographically next greater permutation
+        of numbers.
+
+        If such arrangement is not possible, it must rearrange it as the lowest possible order (ie, sorted in ascending
+        order).
+
+        The replacement must be in-place, do not allocate extra memory.
+
+    Args:
+        A: list of ints to modify
+    """
+    for k in reversed(range(len(A) - 1)):
+        if A[k + 1] > A[k]: break
+    else:
+        A[:] = list(reversed(A))  # pierscin: task doesn't allow returning list(reversed(A))... 😡
+        return
+
+    for l in reversed(range(k + 1, len(A))):
+        if A[k] < A[l]:
+            A[k], A[l] = A[l], A[k]
+            break
+
+    A[k + 1:] = list(reversed(A[k + 1:]))
