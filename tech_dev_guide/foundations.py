@@ -29,7 +29,6 @@ def find_longest_subsequence(S: str, D: Set[str]) -> str:
 
     Returns:
         Longest subsequence of S found in D
-
     """
     letters_to_positions = defaultdict(list)
 
@@ -70,7 +69,6 @@ def string_splosion(s: str) -> str:
 
     Returns:
         Exploded string.
-
     """
     return ''.join([s[:i + 1] for i in range(len(s))])
 
