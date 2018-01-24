@@ -218,3 +218,41 @@ def can_balance(A: List[int]) -> bool:
         split_point += 1
 
     return sum_l == sum_r
+
+
+def interpret(value: int, commands: List[str], args: List[int]) -> int:
+    """
+    Description:
+        Write a simple interpreter which understands "+", "-", and "*" operations. Apply the operations in order using
+        command/arg pairs starting with the initial value of `value`.
+
+        If you encounter an unknown command, return -1.
+
+        interpret(1, ['+'], [1]) → 2
+        interpret(4, ['-'], [2]) → 2
+        interpret(1, ['+', '*'], [1, 3]) → 6
+
+    Link:
+        https://techdevguide.withgoogle.com/paths/foundational/interpreter-problems-for-python/
+
+    Args:
+        value: initial value.
+        commands: operators.
+        args: second operand.
+
+    Returns:
+        Value after interpreting all commands.
+    """
+    NOT_IMPLEMENTED = -1
+
+    strategies = {
+        '+': lambda x, y: x + y,
+        '-': lambda x, y: x - y,
+        '*': lambda x, y: x * y,
+    }
+
+    for i in range(len(commands)):
+        if commands[i] not in strategies: return NOT_IMPLEMENTED
+
+        value = strategies[commands[i]](value, args[i])
+    return value

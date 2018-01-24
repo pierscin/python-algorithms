@@ -1,5 +1,5 @@
 from tech_dev_guide.foundations import find_longest_subsequence, string_splosion, max_span, sum_numbers, without_string, \
-    can_balance
+    can_balance, interpret
 
 
 def test_find_longest_subsequence():
@@ -77,3 +77,12 @@ def test_can_balance():
     assert not can_balance([1, 2, 3, 1, 0, 1, 3])
     assert not can_balance([1])
     assert can_balance([1, 1, 1, 2, 1])
+
+
+def test_interpret():
+    assert interpret(1, ['+'], [1]) == 2
+    assert interpret(4, ['-'], [2]) == 2
+    assert interpret(1, ['+', '*'], [1, 3]) == 6
+    assert interpret(3, ['*'], [4]) == 12
+    assert interpret(0, ['?'], [4]) == -1
+    assert interpret(1, ['+', '*', '-'], [1, 3, 2]) == 4
