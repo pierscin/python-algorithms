@@ -256,3 +256,119 @@ def interpret(value: int, commands: List[str], args: List[int]) -> int:
 
         value = strategies[commands[i]](value, args[i])
     return value
+
+
+def encoder(raw, code_words):
+    """
+    Description:
+        Write a function that replaces the words in `raw` with the words in `code_words` such that the first occurrence
+        of each word in `raw` is assigned the first unassigned word in `code_words`.
+
+        encoder(["a"], ["1", "2", "3", "4"]) → ["1"]
+        encoder(["a", "b"], ["1", "2", "3", "4"]) → ["1", "2"]
+        encoder(["a", "b", "a"], ["1", "2", "3", "4"]) → ["1", "2", "1"]
+
+    Link:
+        https://techdevguide.withgoogle.com/paths/foundational/encoder-problem-hard/
+
+    Args:
+        raw:
+        code_words
+
+    Returns:
+
+    """
+    used, res = dict(), []
+
+    for i, w in enumerate(raw):
+        if w not in used: used[w] = code_words[i]
+
+        res.append(used[w])
+
+    return res
+
+
+def blackjack(a: int, b: int) -> int:
+    """
+    Description:
+        Given 2 int values greater than 0, return whichever value is nearest to 21 without going over. Return 0 if
+        they both go over.
+
+        blackjack(19, 21) → 21
+        blackjack(21, 19) → 21
+        blackjack(19, 22) → 19
+
+    Link:
+        https://techdevguide.withgoogle.com/paths/foundational/software-debugging-warmup/
+
+    Args:
+        a: some int.
+        b: some int.
+
+    Returns:
+        Argument which is nearest to - but not exceeding - 21. 0 if both exceed it.
+    """
+    TARGET, BOTH_ABOVE = 21, 0
+
+    if a == TARGET or b == TARGET: return TARGET
+    if a > TARGET and b > TARGET: return BOTH_ABOVE
+    if a < TARGET and b < TARGET: return max(a, b)
+
+    return min(a, b)
+
+
+def evenly_spaced(a: int, b: int, c: int) -> bool:
+    """
+    Description:
+        Given three ints, a b c, one of them is small, one is medium and one is large. Return true if the three values
+        are evenly spaced, so the difference between small and medium is the same as the difference between
+        medium and large.
+
+        evenly_spaced(2, 4, 6) → true
+        evenly_spaced(4, 6, 2) → true
+        evenly_spaced(4, 6, 3) → false
+
+    Args:
+        a: some int.
+        b: some int.
+        c: some int.
+
+    Returns:
+        Is triplet evenly spaced.
+    """
+    BIG, MED, SML = sorted([a, b, c])
+
+    return BIG - MED == MED - SML
+
+
+def make_bricks(small, big, goal) -> bool:
+    """
+    Description:
+        We want to make a row of bricks that is goal inches long. We have a number of small bricks (1 inch each) and big
+        bricks (5 inches each). Return True if it is possible to make the goal by choosing from the given bricks.
+        This is a little harder than it looks and can be done without any loops.
+
+        make_bricks(3, 1, 8) → True
+        make_bricks(3, 1, 9) → False
+        make_bricks(3, 2, 10) → True
+
+    Link:
+        https://techdevguide.withgoogle.com/paths/foundational/makebricks-problem/
+
+    Args:
+        small: number of small (size = 1) bricks.
+        big: number of big (size = 5) bricks.
+        goal: brick row size to achieve.
+
+    Returns:
+        Is goal achievable with specified bricks.
+    """
+    BIG_SZ = 5
+
+    b, s = divmod(goal, BIG_SZ)
+
+    if b <= big and s <= small: return True
+
+    if small < s: return False
+
+    return goal - big * BIG_SZ <= small
