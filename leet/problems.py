@@ -3,7 +3,7 @@
 Module consists of methods which DO NOT match signatures in problem description - there is no Solution object and types.
 
 """
-from bisect import bisect
+from bisect import bisect, bisect_left
 from itertools import product
 from typing import List
 
@@ -1000,6 +1000,39 @@ def search(A: List[int], x: int) -> int:
     return NOT_FOUND
 
 
+def search_range(A, x) -> List[int]:
+    """Finds inclusive range of indexes of x in a sorted array.
+
+    Description:
+        https://leetcode.com/problems/search-for-a-range/description/
+
+        34. Search for a Range
+        Given an array of integers sorted in ascending order, find the starting and ending position of a given target
+        value.
+
+        Your algorithm's runtime complexity must be in the order of O(log n).
+
+        If the target is not found in the array, return [-1, -1].
+
+    Args:
+        A: sorted list.
+        x: target.
+
+    Returns:
+        Range of indexes of x.
+    """
+
+    NOT_FOUND = [-1, -1]
+
+    if not A: return NOT_FOUND
+
+    l, r = bisect_left(A, x), bisect(A, x)
+
+    if A[r - 1] == x: return [l, r - 1]
+
+    return NOT_FOUND
+
+
 def search_insert(A: List[int], x: int) -> int:
     """Searches insertion point for x in sorted list A, so that A remains sorted after it.
 
@@ -1023,3 +1056,67 @@ def search_insert(A: List[int], x: int) -> int:
     """
     i = bisect(A, x)
     return i - 1 if A[i - 1] == x else i  # pierscin: when i == 0 the A[-1] is checked, but array is sorted, so it works
+
+
+def find_words(words: List[str]) -> List[str]:
+    """Calculates words which can be written with only one row of keyboard keys.
+
+    Description:
+        500. Keyboard Row
+
+        Given a List of words, return the words that can be typed using letters of alphabet on only one row's of
+        American keyboard like the image below.
+
+        ------------
+        | KEYBOARD |
+        |   IMAGE  |
+        |    😉    |
+        ------------
+
+    Link:
+        https://leetcode.com/problems/keyboard-row/description/
+
+    Args:
+        words: words to check.
+
+    Returns:
+        List of words which could be written with only 1 row of keyboard keys.
+    """
+    rows = [
+        set('QWERTYUIOPqwertyuiop'),
+        set('ASDFGHJKLasdfghjkl'),
+        set('ZXCVBNMzxcvbnm')
+    ]
+
+    res = []
+
+    for w in words:
+        for row in rows:
+            if set(w) <= row:
+                res.append(w)
+                break
+
+    return res
+
+def distribute_candies(candies: List[int]) -> int:
+    """Calculates max number of candies kinds which can be given to sister.
+
+    Description:
+        575. Distribute Candies
+
+        Given an integer array with even length, where different numbers in this array represent different kinds of
+        candies. Each number means one candy of the corresponding kind. You need to distribute these candies equally in
+        number to brother and sister. Return the maximum number of kinds of candies the sister could gain.
+
+    Link:
+        https://leetcode.com/problems/distribute-candies/description/
+
+    Args:
+        candies: list of ints
+
+    Returns:
+        Max number of candies taken by sister.
+    """
+    k = len(set(candies))
+
+    return min(len(candies) // 2, k)

@@ -7,7 +7,8 @@ from copy import deepcopy
 from random import randint
 
 from leet.problems import four_sum, remove_nth_from_end, are_parentheses_balanced, merge_two_sorted_lists, \
-    generate_parenthesis, swap_pairs, remove_duplicates, next_permutation, divide, search
+    generate_parenthesis, swap_pairs, remove_duplicates, next_permutation, divide, search, distribute_candies, \
+    find_words
 from leet.utils import ListNode
 
 
@@ -151,3 +152,13 @@ def test_search():
 
     assert search([1, 3], 0) == NOT_FOUND
     assert search([], 0) == NOT_FOUND
+
+
+def test_find_words():
+    assert find_words(["Hello", "Alaska", "Dad", "Peace"]) == ["Alaska", "Dad"]
+
+
+def test_distribute_candies():
+    assert distribute_candies([1,1,1,2]) == 2
+    assert distribute_candies([1,1,2,2,3,3]) == 3
+    assert distribute_candies([1,1,2,3]) == 2
