@@ -29,12 +29,12 @@ class Game:
             for y in range(self.y):
 
                 if self.board[y][x] is not Mine:
-                    adj_mines = sum([self.board[y][x] is Mine for x, y in self._adj_xy(x, y)])
+                    adj_mines = sum([self.board[y][x] is Mine for x, y in self._adj_to(x, y)])
 
                     self.board[y][x] = Cell(adj_mines)
 
     def print(self):
-        """Prints board to standard output"""
+        """Prints board to standard output."""
         rows = []
 
         for row in self.board:
@@ -48,7 +48,7 @@ class Game:
         print('\n'.join(rows) + '\n')
 
     def act(self, x: int, y: int) -> bool:
-        """Acts on x,y cell - like a click in classic minesweeper."""
+        """Acts on x,y cell - like a click in classic minesweeper. When returns True, mine was uncovered."""
         if not self.board[y][x].visible:
             if self.board[y][x] is Mine:
                 self.uncover_all()
@@ -56,18 +56,18 @@ class Game:
             else:
                 self.board[y][x].visible = True
                 if self.board[y][x].value == '0':
-                    for _x, _y in self._adj_xy(x,y):
+                    for _x, _y in self._adj_to(x, y):
                         self.act(_x, _y)
         return False
 
     def uncover_all(self):
-        """Makes all cells visible"""
+        """Makes all cells visible."""
         for row in self.board:
             for cell in row:
                 cell.visible = True
 
-    def _adj_xy(self, x: int, y: int) -> Tuple[Tuple[int]]:
-        """Returns all adjacent cells to x, y"""
+    def _adj_to(self, x: int, y: int) -> Tuple[Tuple[int]]:
+        """Returns coordinates of cells adjacent to x, y."""
         adj = []
 
         if y > 0:
