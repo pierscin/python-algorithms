@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 
 def find_nth(haystack: str, needle: str, n: int, start:Optional[int]=None, end:Optional[int]=None) -> int:
@@ -37,19 +37,19 @@ def decompress(s: str) -> str:
     Returns:
         Decompressed string.
     """
-    def _decompress(start: int, end: int) -> str:
+    def _decompress(start: int, end: int) -> List[str]:
         left = s.find('[', start, end)
         first_right = s.find(']', start, end)
 
-        if left == first_right == -1: return s[start:end]  # pierscin: only letters in []
-        if s[left:first_right] == '': return ''  # pierscin: empty string in []
+        if left == first_right == -1: return list(s[start:end])  # pierscin: only letters in []
+        if s[left:first_right] == '': return []  # pierscin: empty string in []
 
         count_of_left = s.count('[', start, first_right)
         right = find_nth(s, ']', count_of_left, start, end)
 
-        res = ''
+        res = []
         for i in range(start, left):
-            if s[i].isalpha(): res += s[i]
+            if s[i].isalpha(): res.append(s[i])
             else:
                 number = int(s[i:left])
                 break
@@ -64,11 +64,12 @@ def decompress(s: str) -> str:
         # pierscin: letters after brackets
         i = right + 1
         while i < end and s[i].isalpha():
-            res += s[i]
+            res.append(s[i])
             i += 1
 
         return res
 
     s = '1[' + s[:] + ']'
 
-    return _decompress(0, len(s))
+    return ''.join(_decompress(0, len(s)))
+
