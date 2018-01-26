@@ -1,6 +1,22 @@
 import time
-from copy import copy
-from typing import Sequence, Dict, Callable, Any
+from typing import Sequence, Any, Dict, Callable, List
+
+
+# TODO: min binary search
+
+def binary_search(A: List[int], x: int) -> int:
+    NOT_FOUND = -1
+
+    lo, hi = 0, len(A) - 1
+
+    while lo <= hi:
+        mid = (lo + hi) // 2
+
+        if x == A[mid]: return mid
+        elif x > A[mid]: lo = mid + 1
+        else: hi = mid - 1
+
+    return NOT_FOUND
 
 
 class Benchmark:

@@ -5,12 +5,12 @@ Sanity checks for all "sorts". List to sort is rather small so it won't take lon
 
 from random import randint
 
-from algs4.sorts import selection_sort, insertion_sort, shell_sort
+from algs4.sorts import selection_sort, insertion_sort, shell_sort, merge_sort, quick_sort, three_way_quick_sort
 
 
 def test_sorting_methods():
-    sort_strategies = (selection_sort, insertion_sort, shell_sort)
-    TO_SORT = [randint(0,10) for _ in range(100)]
+    sort_strategies = (selection_sort, insertion_sort, shell_sort, merge_sort, quick_sort, three_way_quick_sort)
+    TO_SORT = [randint(0, 10) for _ in range(100)]
     SORTED = sorted(TO_SORT)
 
     for sort in sort_strategies:
