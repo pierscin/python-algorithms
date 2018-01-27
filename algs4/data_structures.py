@@ -55,10 +55,11 @@ class MaxHeap:
         return self.heap[0].x
 
 
-class MinHeapOnSortedList:
-    """Min heap based on SortedList.
+class MinPqOnSortedList:
+    """Min priority queue based on SortedList.
 
-    SortedList keeps ascending order invariant, so LtToGtWrapper is used to mimic descending order of items in max heap.
+    SortedList keeps ascending order invariant, so LtToGtWrapper is used to mimic descending order of items in max
+    priority queue.
     """
 
     def __init__(self): self.heap = SortedList([])
@@ -66,11 +67,11 @@ class MinHeapOnSortedList:
     def __len__(self): return len(self.heap)
 
     def push(self, x: Any):
-        """Push element to the heap."""
+        """Push element to the queue."""
         self.heap.add(LtToGtWrapper(x))
 
     def pop_min(self) -> Any:
-        """Pop min element from the heap. Raises IndexError when heap is empty."""
+        """Pop min element from queue. Raises IndexError when queue is empty."""
         return self.heap.pop().x
 
     def peek_min(self) -> Any:
@@ -78,19 +79,19 @@ class MinHeapOnSortedList:
         return self.heap[-1].x
 
 
-class MaxHeapOnSortedList:
-    """Max heap based on SortedList."""
+class MaxPqOnSortedList:
+    """Max priority queue based on SortedList."""
 
     def __init__(self): self.heap = SortedList([])
 
     def __len__(self): return len(self.heap)
 
     def push(self, x: Any):
-        """Push element to the heap."""
+        """Push element to the queue."""
         self.heap.add(x)
 
     def pop_max(self) -> Any:
-        """Pop max element from the heap. Raises IndexError when heap is empty."""
+        """Pop max element from queue. Raises IndexError when queue is empty."""
         return self.heap.pop()
 
     def peek_max(self) -> Any:
