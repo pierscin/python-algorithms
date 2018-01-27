@@ -1,5 +1,9 @@
 import heapq
-from typing import Any
+from typing import Any, Optional
+
+from sortedcontainers import SortedList
+
+from utils import LtToGtWrapper
 
 
 class MinHeap:
@@ -17,11 +21,11 @@ class MinHeap:
         heapq.heappush(self.heap, x)
 
     def pop_min(self):
-        """Pops min element from the heap. Raises IndexError when heap is empty."""
+        """Pop min element from the heap. Raises IndexError when heap is empty."""
         return heapq.heappop(self.heap)
 
     def peek_min(self):
-        """Get min element value without removing it from the heap."""
+        """Get min element without removing it."""
         return self.heap[0]
 
 
@@ -30,20 +34,9 @@ class MaxHeap:
 
     Python's heapq methods are very clunky to use with min heap, but with max heap it's even worse - there is
     heapq._heappop_max, BUT there isn't heapq._heappush_max... It means that user should always remember to heapify list
-    to keep it's max heap invariant. To avoid that, Wrapper class with < and == operator was created - when items are
-    pushed to the heap they are wrapped, but are unwrapped before pop.
+    to keep it's max heap invariant. To avoid that, wrapper class (LtToGtWrapper) with < and == operator was created -
+    items are wrapped when pushed to the min heap and unwrapped before pop.
     """
-
-    class Wrapper:
-        """Wrapper class to use heapq's min_heap methods with max_heap."""
-
-        def __init__(self, x): self.x = x
-
-        def __lt__(self, other): return self.x > other.x
-
-        def __eq__(self, other): return self.x == other.x
-
-        def __str__(self): return str(self.x)
 
     def __init__(self): self.heap = []
 
@@ -51,18 +44,61 @@ class MaxHeap:
 
     def push(self, x: Any):
         """Push element to the heap."""
-        heapq.heappush(self.heap, MaxHeap.Wrapper(x))
+        heapq.heappush(self.heap, LtToGtWrapper(x))
 
     def pop_max(self) -> Any:
-        """Pops max element from the heap. Raises IndexError when heap is empty."""
+        """Pop max element from the heap. Raises IndexError when heap is empty."""
         return heapq.heappop(self.heap).x
 
     def peek_max(self) -> Any:
-        """Get max element value without removing it from the heap."""
+        """Get max element without removing it."""
         return self.heap[0].x
 
 
-class MyMaxHeap:
+class MinHeapOnSortedList:
+    """Min heap based on SortedList.
+
+    SortedList keeps ascending order invariant, so LtToGtWrapper is used to mimic descending order of items in max heap.
+    """
+
+    def __init__(self): self.heap = SortedList([])
+
+    def __len__(self): return len(self.heap)
+
+    def push(self, x: Any):
+        """Push element to the heap."""
+        self.heap.add(LtToGtWrapper(x))
+
+    def pop_min(self) -> Any:
+        """Pop min element from the heap. Raises IndexError when heap is empty."""
+        return self.heap.pop().x
+
+    def peek_min(self) -> Any:
+        """Get min element without removing it."""
+        return self.heap[-1].x
+
+
+class MaxHeapOnSortedList:
+    """Max heap based on SortedList."""
+
+    def __init__(self): self.heap = SortedList([])
+
+    def __len__(self): return len(self.heap)
+
+    def push(self, x: Any):
+        """Push element to the heap."""
+        self.heap.add(x)
+
+    def pop_max(self) -> Any:
+        """Pop max element from the heap. Raises IndexError when heap is empty."""
+        return self.heap.pop()
+
+    def peek_max(self) -> Any:
+        """Get max element without removing it."""
+        return self.heap[-1].x
+
+
+class MaxHeapOnList:
     """Max heap implementation from scratch.
 
     List which stores elements is 1-based - this leads to simpler math in _sink/_swim, but there is helper field N to
@@ -84,7 +120,7 @@ class MyMaxHeap:
         self._swim(self.N)
 
     def pop_max(self) -> Any:
-        """Pops max element from the heap. Raises IndexError when heap is empty."""
+        """Pop max element from the heap. Raises IndexError when heap is empty."""
         max_val = self.heap[1]
 
         self.heap[1] = self.heap[self.N]
@@ -97,7 +133,7 @@ class MyMaxHeap:
         return max_val
 
     def peek_max(self) -> Any:
-        """Get max element value without removing it from the heap."""
+        """Get max element without removing it."""
         return self.heap[1]
 
     def _swim(self, n):
@@ -117,3 +153,66 @@ class MyMaxHeap:
             self.heap[j], self.heap[n] = self.heap[n], self.heap[j]
 
             n = j
+
+
+class Bst:
+    """Binary Search Tree."""
+
+    class Node:
+        """Bst node."""
+
+        def __init__(self, key: Any, val, N):
+            self.key = key
+            self.val = val
+            self.N = N
+            self.left, self.right = None, None
+
+    def __init__(self):
+        self.root = None
+
+    def put(self, key, val: object):
+        if key is None: raise ValueError('None keys are not permitted')
+
+        self.root = self._put(self.root, key, val)
+
+    def get(self, key) -> object:
+        if key is None: raise ValueError('None keys are not permitted')
+
+        return self._get(self.root, key)
+
+    def remove(self, key) -> None:
+        if key is None: raise ValueError('None keys are not permitted')
+
+        self.root = self._remove(self.root, key)
+
+    def _put(self, node: Optional['Bst.Node'], key, val: object) -> 'Bst.Node':
+
+        if node is None: return Bst.Node(key, val, 1)
+
+        if key > node.key:   self._put(node.right, key, val)
+        elif key < node.key: self._put(node.left, key, val)
+        else: node.val = val
+
+        node.N = node.left.N + node.right.N + 1
+
+        return node
+
+    def _get(self, node: Optional['Bst.Node'], key) -> object:
+        if node is None: return None
+
+        if key > node.key:   return self._get(node.right, key)
+        elif key < node.key: return self._get(node.left, key)
+
+        return node.val
+
+    def _remove(self, node: Optional['Bst.Node'], key) -> Optional['Bst.Node']:
+        if node is None: return None
+
+        if key > node.key:   self._put(node.right, key)
+        elif key < node.key: self._put(node.left, key)
+        else:
+            node = node.left
+
+        node.N = node.left.N + node.right.N - 1
+
+        return node

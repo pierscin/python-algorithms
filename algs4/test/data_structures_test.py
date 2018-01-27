@@ -11,7 +11,7 @@ All of them are tested in this module.
 from collections import deque
 from random import randint
 
-from algs4.data_structures import MinHeap, MaxHeap, MyMaxHeap
+from algs4.data_structures import MinHeap, MaxHeap, MaxHeapOnList, MaxHeapOnSortedList, MinHeapOnSortedList
 
 
 def test_list_have_stack_properties():
@@ -76,40 +76,37 @@ def test_collections_deque_shave_queue_and_deque_properties():  # pierscin: list
     assert deq.popleft() == SECOND
 
 
-def test_max_heap():
-    max_heap = MaxHeap()
-    my_max_heap = MyMaxHeap()
+def test_max_heaps():
+    heaps = (MaxHeap(), MaxHeapOnList(), MaxHeapOnSortedList())
 
     values = [randint(0, 10) for _ in range(100)]
 
     for x in values:
-        max_heap.push(x)
-        my_max_heap.push(x)
+        for heap in heaps: heap.push(x)
 
-    assert len(max_heap) == my_max_heap.N == len(values)
+    for heap in heaps: assert len(heap) == len(values)
 
     values.sort(reverse=True)
 
     for x in values:
-        assert x == max_heap.pop_max() == my_max_heap.pop_max()
+        for heap in heaps: assert x == heap.pop_max()
 
-    assert not max_heap
-    assert not my_max_heap
+    for heap in heaps: assert not heap
 
 
-def test_min_heap():
-    min_heap = MinHeap()
+def test_min_heaps():
+    heaps = (MinHeap(), MinHeapOnSortedList())
 
     values = [randint(0, 10) for _ in range(100)]
 
     for x in values:
-        min_heap.push(x)
+        for heap in heaps: heap.push(x)
 
-    assert len(min_heap) == len(values)
+    for heap in heaps: assert len(heap) == len(values)
 
     values.sort()
 
     for x in values:
-        assert x == min_heap.pop_min()
+        for heap in heaps: assert x == heap.pop_min()
 
-    assert not min_heap
+    for heap in heaps: assert not heap

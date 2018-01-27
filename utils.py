@@ -1,5 +1,17 @@
 import time
-from typing import Sequence, Any, Dict, Callable, List
+from typing import Sequence, Any, Callable, List
+
+
+class LtToGtWrapper:
+    """Wrapper class to use structures with ascending sort order as descending ones, e.g. SortedList as max heap."""
+
+    def __init__(self, x): self.x = x
+
+    def __lt__(self, other): return self.x > other.x
+
+    def __eq__(self, other): return self.x == other.x
+
+    def __str__(self): return str(self.x)
 
 
 # TODO: min binary search
@@ -27,7 +39,7 @@ class Benchmark:
         self.avg_time = total_time / tries
 
 
-def running_time_of(methods: Sequence[Callable], args: Sequence[Any], tries: int) -> Dict[str, Benchmark]:
+def running_time_of(methods: Sequence[Callable], args: Sequence[Any], tries: int) -> List[Benchmark]:
     """Returns benchmark data for each method listed after specified number of executions and arguments.
 
     Passing methods and args is tricky, because they should always be a sequence even if there's 1 tested method or
@@ -46,9 +58,9 @@ def running_time_of(methods: Sequence[Callable], args: Sequence[Any], tries: int
         tries: number of executions for each method
 
     Returns:
-        A dict mapping with each method name as key and Benchmark object with results
+        A list with Benchmark objects containing test results.
     """
-    benchmarks = dict()
+    benchmarks = []
     for m in methods:
         t = 0
         for _ in range(tries):
@@ -57,5 +69,5 @@ def running_time_of(methods: Sequence[Callable], args: Sequence[Any], tries: int
             m(*copy_of_args)
             e = time.process_time()
             t += e - s
-        benchmarks[m.__name__] = Benchmark(m.__name__, t, tries)
+        benchmarks.append(Benchmark(m.__name__, t, tries))
     return benchmarks
