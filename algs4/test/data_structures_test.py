@@ -114,18 +114,19 @@ def test_min_priority_queues():
 
 def test_binary_search_tree():
     bst = Bst()
+    KEY, VALUE = 1, 1
 
     assert not bst
 
-    bst.put(1, 2)
+    bst.put(KEY, VALUE)
 
     assert len(bst) == 1
 
-    bst.put(1, 2)
+    bst.put(KEY, VALUE)
 
     assert len(bst) == 1
 
-    bst.put(1, 1)
+    bst.put(KEY, VALUE + 1)
 
     assert len(bst) == 1
 
@@ -133,7 +134,7 @@ def test_binary_search_tree():
 
     assert not bst
 
-    unique_keys = [i for i in range(50)]
+    unique_keys = list(range(50))
     shuffle(unique_keys)
 
     for i, k in enumerate(unique_keys):
