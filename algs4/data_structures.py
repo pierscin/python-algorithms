@@ -7,6 +7,7 @@ class MinHeap:
 
     Python's heapq methods are clunky to use - this wrapper feels more natural.
     """
+
     def __init__(self): self.heap = []
 
     def __len__(self): return len(self.heap)
@@ -35,6 +36,7 @@ class MaxHeap:
 
     class Wrapper:
         """Wrapper class to use heapq's min_heap methods with max_heap."""
+
         def __init__(self, x): self.x = x
 
         def __lt__(self, other): return self.x > other.x

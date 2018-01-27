@@ -5,9 +5,9 @@ Structures can be divided into 3 categories:
  - built-into Python standard library and NOT implemented - those which were basic.
  - implemented by hand.
 
-All of them are tested in this module
-
+All of them are tested in this module.
 """
+
 from collections import deque
 from random import randint
 
@@ -90,7 +90,7 @@ def test_max_heap():
 
     values.sort(reverse=True)
 
-    for _, x in enumerate(values):
+    for x in values:
         assert x == max_heap.pop_max() == my_max_heap.pop_max()
 
     assert not max_heap
@@ -109,7 +109,7 @@ def test_min_heap():
 
     values.sort()
 
-    for _, x in enumerate(values):
+    for x in values:
         assert x == min_heap.pop_min()
 
     assert not min_heap
