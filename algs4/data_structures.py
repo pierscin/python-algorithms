@@ -206,13 +206,4 @@ class Bst:
         return node.val
 
     def _remove(self, node: Optional['Bst.Node'], key) -> Optional['Bst.Node']:
-        if node is None: return None
-
-        if key > node.key:   self._put(node.right, key)
-        elif key < node.key: self._put(node.left, key)
-        else:
-            node = node.left
-
-        node.N = node.left.N + node.right.N - 1
-
-        return node
+        raise NotImplementedError()
