@@ -1,8 +1,8 @@
 from random import shuffle
-from typing import Sequence
+from typing import MutableSequence
 
 
-def selection_sort(A: Sequence) -> None:
+def selection_sort(A: MutableSequence) -> None:
     """Selection sort implementation.
 
     Starting from i = 0, find the smallest item in A[i:], exchange it with A[i], increment i.
@@ -23,7 +23,7 @@ def selection_sort(A: Sequence) -> None:
         A[i], A[j] = A[j], A[i]
 
 
-def insertion_sort(A: Sequence) -> None:
+def insertion_sort(A: MutableSequence) -> None:
     """Insertion sort implementation.
 
     Pick one element and insert it in its place among already sorted part of a sequence (move larger items towards
@@ -43,7 +43,7 @@ def insertion_sort(A: Sequence) -> None:
                 break
 
 
-def shell_sort(A: Sequence) -> None:
+def shell_sort(A: MutableSequence) -> None:
     """Shell sort implementation.
 
     Apply insertion sort for elements with distance h between them. Make h smaller.
@@ -70,7 +70,7 @@ def shell_sort(A: Sequence) -> None:
         h //= 3
 
 
-def merge_sort(A: Sequence) -> None:
+def merge_sort(A: MutableSequence) -> None:
     """Merge sort implementation.
 
     Args:
@@ -108,7 +108,7 @@ def merge_sort(A: Sequence) -> None:
     _merge_sort(0, len(A) - 1)
 
 
-def comprehension_quick_sort(A: Sequence):
+def comprehension_quick_sort(A: MutableSequence):
     """Quick sort implementation using list comprehension.
 
     Args:
@@ -129,7 +129,7 @@ def comprehension_quick_sort(A: Sequence):
     A[:] = partition(A)
 
 
-def comprehension_three_way_quick_sort(A: Sequence):
+def comprehension_three_way_quick_sort(A: MutableSequence):
     """Three way quick sort implementation using list comprehension.
 
     Args:
@@ -151,7 +151,7 @@ def comprehension_three_way_quick_sort(A: Sequence):
     A[:] = partition(A)
 
 
-def quick_sort(A: Sequence):
+def quick_sort(A: MutableSequence):
     """Quick sort implementation.
 
     Args:
@@ -193,7 +193,7 @@ def quick_sort(A: Sequence):
     sort(0, len(A) - 1)
 
 
-def three_way_quick_sort(A: Sequence):
+def three_way_quick_sort(A: MutableSequence):
     """Three way quick sort implementation.
 
     Args:
