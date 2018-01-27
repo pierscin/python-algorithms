@@ -159,8 +159,6 @@ class MaxHeapOnList:
 class Bst:
     """Binary Search Tree."""
 
-    # TODO: size
-
     class Node:
         """Bst node."""
 
@@ -171,6 +169,9 @@ class Bst:
 
     def __init__(self):
         self.root = None
+
+    def __len__(self):
+        return self.size(self.root)
 
     def put(self, key, val: object) -> None:
         """Upsert of value associated with the key."""
@@ -206,9 +207,14 @@ class Bst:
 
         self.root = self._remove(self.root, key)
 
+    def size(self, node: Optional['Bst.Node']) -> int:
+        if node is None: return 0
+
+        return self.size(node.left) + self.size(node.right) + 1
+
     def _put(self, node: Optional['Bst.Node'], key, val: object) -> 'Bst.Node':
 
-        if node is None: return Bst.Node(key, val, 1)
+        if node is None: return Bst.Node(key, val)
 
         if key > node.key:   node.right = self._put(node.right, key, val)
         elif key < node.key: node.left = self._put(node.left, key, val)

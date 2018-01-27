@@ -9,9 +9,9 @@ All of them are tested in this module.
 """
 
 from collections import deque
-from random import randint
+from random import randint, shuffle
 
-from algs4.data_structures import MinHeap, MaxHeap, MaxHeapOnList, MaxPqOnSortedList, MinPqOnSortedList
+from algs4.data_structures import MinHeap, MaxHeap, MaxHeapOnList, MaxPqOnSortedList, MinPqOnSortedList, Bst
 
 
 def test_list_have_stack_properties():
@@ -110,3 +110,39 @@ def test_min_priority_queues():
         for pq in priority_queues: assert x == pq.pop_min()
 
     for pq in priority_queues: assert not pq
+
+
+def test_binary_search_tree():
+    bst = Bst()
+
+    assert not bst
+
+    bst.put(1, 2)
+
+    assert len(bst) == 1
+
+    bst.put(1, 2)
+
+    assert len(bst) == 1
+
+    bst.put(1, 1)
+
+    assert len(bst) == 1
+
+    bst.remove_min()
+
+    assert not bst
+
+    unique_keys = [i for i in range(50)]
+    shuffle(unique_keys)
+
+    for i, k in enumerate(unique_keys):
+        bst.put(k, None)
+        assert len(bst) == i + 1
+
+    SIZE_BEFORE_DELETING = len(bst)
+    shuffle(unique_keys)
+
+    for i, k in enumerate(unique_keys):
+        bst.remove(k)
+        assert len(bst) == SIZE_BEFORE_DELETING - (i + 1)
