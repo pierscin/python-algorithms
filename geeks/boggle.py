@@ -22,52 +22,61 @@ Link:
 Returns:
     List of words which can be made from boggle.
 """
-from typing import List, Dict, Set, Callable
+from collections import defaultdict
+from typing import List, Dict, Set, Callable, DefaultDict
 
 
-class BoggleGraph:
-    """After initialization, field unique_words is the result."""
+class Graph:
+    """Undirected graph."""
 
-    def __init__(self, boggle: List[List[str]], is_word: Callable[[str], bool]):
-        self.M, self.N = len(boggle), len(boggle[0])  # type: int, int
-        self._v = self.M * self.N  # type: int
-        self._is_word = is_word
-        self._i_to_a = {}  # type: Dict[int, str]
-        self._adj = {v: set() for v in range(self._v)}  # type: Dict[int, Set[int]]
+    def __init__(self, v: int):
+        """Initialize Graph with 'v' vertices and 0 edges."""
+        self.v, self.e = v, 0  # type: int, int
 
-        adjacent = [(i, j) for i in (-1, 0, 1) for j in (-1, 0, 1) if not i == j == 0]
+        self.adj = defaultdict(set)  # type: DefaultDict[int, Set[int]]
 
-        for y in range(self.N):
-            for x in range(self.M):
-                i = self._as_i(x, y)
-                self._i_to_a[i] = boggle[y][x]
+    def add_edge(self, w, v):
+        self.adj[w].add(v)
+        self.adj[v].add(w)
 
-                for dx, dy in adjacent:
-                    if 0 <= x + dx <= self.M - 1 and 0 <= y + dy <= self.N - 1:
-                        self._add_edge(i, self._as_i(x + dx, y + dy))
 
-        self.unique_words = set()
+def find_words(boggle: List[List[str]], is_word: Callable[[str], bool]) -> Set[str]:
+    """All words while searching adjacent cells of boggle."""
+    N, M = len(boggle), len(boggle[0])  # type: int, int
+    i_to_a = {}  # type: Dict[int, str]
 
-        for i in range(self.M * self.N):
-            self._dfs(i, [False] * (self.M * self.N), [])
+    def as_i(x: int, y: int) -> int: return y * M + x
 
-    def _as_i(self, m: int, n: int) -> int:
-        return m * self.M + n
+    g = Graph(M * N)
 
-    def _add_edge(self, w, v):
-        self._adj[w].add(v)
-        self._adj[v].add(w)
+    adjacent = [(i, j) for i in (-1, 0, 1) for j in (-1, 0, 1) if not i == j == 0]
 
-    def _dfs(self, s: int, visited: List[int], stack: List[int]):
+    for y in range(N):
+        for x in range(M):
+            i = as_i(x, y)
+            i_to_a[i] = boggle[y][x]
+
+            for dx, dy in adjacent:
+                if 0 <= x + dx <= M - 1 and 0 <= y + dy <= N - 1:
+                    g.add_edge(i, as_i(x + dx, y + dy))
+
+    def dfs(s: int, visited: List[int], stack: List[int]):
         visited[s] = True
         stack.append(s)
 
-        current = ''.join([self._i_to_a[i] for i in stack])
+        current = ''.join([i_to_a[i] for i in stack])
 
-        if self._is_word(current): self.unique_words.add(current)
+        if is_word(current): unique_words.add(current)
 
-        for v in self._adj[s]:
+        for v in g.adj[s]:
             if not visited[v]:
-                self._dfs(v, visited, stack)
+                dfs(v, visited, stack)
 
         visited[stack.pop()] = False
+
+    unique_words = set()
+
+    for i in range(M * N):
+        dfs(i, [False] * (M * N), [])
+
+    return unique_words
