@@ -60,23 +60,26 @@ def find_words(boggle: List[List[str]], is_word: Callable[[str], bool]) -> Set[s
                 if 0 <= x + dx <= M - 1 and 0 <= y + dy <= N - 1:
                     g.add_edge(i, as_i(x + dx, y + dy))
 
-    def dfs(s: int, visited: List[int], stack: List[int]):
+    def dfs(s: int, letters: List[str], visited: List[int], stack: List[int]):
         visited[s] = True
         stack.append(s)
 
-        current = ''.join([i_to_a[i] for i in stack])
+        letters.append(i_to_a[s])
 
-        if is_word(current): unique_words.add(current)
+        possible_word = ''.join(letters)
+
+        if is_word(possible_word): unique_words.add(possible_word)
 
         for v in g.adj[s]:
             if not visited[v]:
-                dfs(v, visited, stack)
+                dfs(v, letters, visited, stack)
 
+        letters.pop()
         visited[stack.pop()] = False
 
     unique_words = set()
 
     for i in range(M * N):
-        dfs(i, [False] * (M * N), [])
+        dfs(i, [], [False] * (M * N), [])
 
     return unique_words
