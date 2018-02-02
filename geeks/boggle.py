@@ -42,23 +42,19 @@ class Graph:
 
 def find_words(boggle: List[List[str]], is_word: Callable[[str], bool]) -> Set[str]:
     """All words while searching adjacent cells of boggle."""
-    N, M = len(boggle), len(boggle[0])  # type: int, int
-    i_to_a = {}  # type: Dict[int, str]
-
     def as_i(x: int, y: int) -> int: return y * M + x
 
-    g = Graph(M * N)
+    def add_adj_fields():
+        adjacent = tuple((i, j) for i in (-1, 0, 1) for j in (-1, 0, 1) if not i == j == 0)
 
-    adjacent = [(i, j) for i in (-1, 0, 1) for j in (-1, 0, 1) if not i == j == 0]
+        for y in range(N):
+            for x in range(M):
+                i = as_i(x, y)
+                i_to_a[i] = boggle[y][x]
 
-    for y in range(N):
-        for x in range(M):
-            i = as_i(x, y)
-            i_to_a[i] = boggle[y][x]
-
-            for dx, dy in adjacent:
-                if 0 <= x + dx <= M - 1 and 0 <= y + dy <= N - 1:
-                    g.add_edge(i, as_i(x + dx, y + dy))
+                for dx, dy in adjacent:
+                    if 0 <= x + dx <= M - 1 and 0 <= y + dy <= N - 1:
+                        g.add_edge(i, as_i(x + dx, y + dy))
 
     def dfs(s: int, letters: List[str], visited: List[int], stack: List[int]):
         visited[s] = True
@@ -77,7 +73,13 @@ def find_words(boggle: List[List[str]], is_word: Callable[[str], bool]) -> Set[s
         letters.pop()
         visited[stack.pop()] = False
 
+    N, M = len(boggle), len(boggle[0])  # type: int, int
+    i_to_a = {}  # type: Dict[int, str]
     unique_words = set()
+
+    g = Graph(M * N)
+
+    add_adj_fields()
 
     for i in range(M * N):
         dfs(i, [], [False] * (M * N), [])
