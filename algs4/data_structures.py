@@ -3,7 +3,7 @@ from typing import Any, Optional
 
 from sortedcontainers import SortedList
 
-from utils import LtAsGtWrapper
+from utils import ReverseOrderingWrapper
 
 
 class MinHeap:
@@ -34,7 +34,7 @@ class MaxHeap:
 
     Python's heapq methods are very clunky to use with min heap, but with max heap it's even worse - there is
     heapq._heappop_max, BUT there isn't heapq._heappush_max... It means that user should always remember to heapify list
-    to keep it's max heap invariant. To avoid that, wrapper class (LtAsGtWrapper) with < and == operator was created -
+    to keep it's max heap invariant. To avoid that, wrapper class (ReverseOrderingWrapper) with < and == operator was created -
     items are wrapped when pushed to the min heap and unwrapped before pop.
     """
 
@@ -44,7 +44,7 @@ class MaxHeap:
 
     def push(self, x: Any):
         """Push element to the heap."""
-        heapq.heappush(self.heap, LtAsGtWrapper(x))
+        heapq.heappush(self.heap, ReverseOrderingWrapper(x))
 
     def pop_max(self) -> Any:
         """Pop max element from the heap. Raises IndexError when heap is empty."""
@@ -58,7 +58,7 @@ class MaxHeap:
 class MinPqOnSortedList:
     """Min priority queue based on SortedList.
 
-    SortedList keeps ascending order invariant, so LtAsGtWrapper is used to mimic descending order of items in max
+    SortedList keeps ascending order invariant, so ReverseOrderingWrapper is used to mimic descending order of items in max
     priority queue.
     """
 
@@ -68,7 +68,7 @@ class MinPqOnSortedList:
 
     def push(self, x: Any):
         """Push element to the queue."""
-        self.heap.add(LtAsGtWrapper(x))
+        self.heap.add(ReverseOrderingWrapper(x))
 
     def pop_min(self) -> Any:
         """Pop min element from queue. Raises IndexError when queue is empty."""

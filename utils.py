@@ -4,7 +4,7 @@ from typing import Sequence, Any, Callable, List
 
 
 @total_ordering
-class LtAsGtWrapper:
+class ReverseOrderingWrapper:
     """Wrapper class to use structures with ascending sort order as descending ones, e.g. SortedList as min heap."""
 
     def __init__(self, x): self.x = x
