@@ -4,12 +4,12 @@ from typing import Sequence, Any, Callable, List
 
 
 @total_ordering
-class LtToGtWrapper:
+class LtAsGtWrapper:
     """Wrapper class to use structures with ascending sort order as descending ones, e.g. SortedList as min heap."""
 
     def __init__(self, x): self.x = x
 
-    def __lt__(self, other): return self.x < other.x
+    def __lt__(self, other): return self.x > other.x
 
     def __eq__(self, other): return self.x == other.x
 
