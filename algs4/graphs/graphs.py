@@ -200,6 +200,7 @@ class Prim:
 
         self._marked = [False] * g.v
         self._min_pq = MinHeap()
+        self._distance_to = [float('inf')] * g.v
 
         self._visit(g, 0)
 
@@ -218,4 +219,6 @@ class Prim:
     def _visit(self, g: EdgeWeightedGraph, v: int) -> None:
         self._marked[v] = True
         for e in g.adj[v]:
-            if not self._marked[e.other(v)]: self._min_pq.push(e)  #TODO: optimize
+            if not self._marked[e.other(v)] and e.weight < self._distance_to[e.other(v)]:
+                self._distance_to[e.other(v)] = e.weight
+                self._min_pq.push(e)  # TODO: indexed min pq
