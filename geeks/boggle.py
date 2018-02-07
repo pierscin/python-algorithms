@@ -22,22 +22,9 @@ Link:
 Returns:
     List of words which can be made from boggle.
 """
-from collections import defaultdict
-from typing import List, Dict, Set, Callable, DefaultDict
+from typing import List, Dict, Set, Callable
 
-
-class Graph:
-    """Undirected graph."""
-
-    def __init__(self, v: int):
-        """Initialize Graph with 'v' vertices and 0 edges."""
-        self.v, self.e = v, 0  # type: int, int
-
-        self.adj = defaultdict(set)  # type: DefaultDict[int, Set[int]]
-
-    def add_edge(self, w, v):
-        self.adj[w].add(v)
-        self.adj[v].add(w)
+from algs4.graphs.graphs import Graph
 
 
 def find_words(boggle: List[List[str]], is_word: Callable[[str], bool]) -> Set[str]:
