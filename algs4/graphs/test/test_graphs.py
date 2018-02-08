@@ -2,7 +2,8 @@ import os
 
 from pytest import approx
 
-from algs4.graphs.graphs import Graph, EdgeWeightedGraph, Prim, Kruskal, LazyPrim, Dijkstra, EdgeWeightedDigraph
+from algs4.graphs.graphs import Graph, EdgeWeightedGraph, EagerPrim, Kruskal, Prim, Dijkstra, EdgeWeightedDigraph, \
+    EagerDijkstra
 
 
 def resource_path(name: str) -> str:
@@ -23,14 +24,14 @@ def test_edge_weighted_graph_creation_from_file():
     assert ewg.e == 16
 
 
-def test_calculating_mst_weight_on_tiny_data_with_lazy_prim():
-    mst = LazyPrim(EdgeWeightedGraph.from_file(resource_path('tiny_ewg.txt')))
+def test_calculating_mst_weight_on_tiny_data_with_prim():
+    mst = Prim(EdgeWeightedGraph.from_file(resource_path('tiny_ewg.txt')))
 
     assert mst.weight == approx(1.81)
 
 
-def test_calculating_mst_weight_on_tiny_data_with_prim():
-    mst = Prim(EdgeWeightedGraph.from_file(resource_path('tiny_ewg.txt')))
+def test_calculating_mst_weight_on_tiny_data_with_eager_prim():
+    mst = EagerPrim(EdgeWeightedGraph.from_file(resource_path('tiny_ewg.txt')))
 
     assert mst.weight == approx(1.81)
 
@@ -44,7 +45,7 @@ def test_calculating_mst_weight_on_tiny_data_with_kruskal():
 def test_compare_mst_weight_on_larger_data_set():
     ewg = EdgeWeightedGraph.from_file(resource_path('medium_ewg.txt'))
 
-    assert LazyPrim(ewg).weight == approx(Prim(ewg).weight) == approx(Kruskal(ewg).weight)
+    assert Prim(ewg).weight == approx(EagerPrim(ewg).weight) == approx(Kruskal(ewg).weight)
 
 
 def test_calculating_shortest_path_on_tiny_data_with_dijkstra():
@@ -59,6 +60,17 @@ def test_calculating_shortest_path_on_tiny_data_with_dijkstra():
         7: 0.60
     }
 
-    sp = Dijkstra(EdgeWeightedDigraph.from_file(resource_path('tiny_ewd.txt')))
+    digraph = EdgeWeightedDigraph.from_file(resource_path('tiny_ewd.txt'))
 
-    for v, d in v_to_d.items(): assert sp.distance_to[v] == approx(d)
+    for sp in (EagerDijkstra(digraph), Dijkstra(digraph)):
+        for v, d in v_to_d.items(): assert sp.distance_to[v] == approx(d)
+
+
+def test_compare_shortest_paths_on_larger_data_set():
+    digraph = EdgeWeightedDigraph.from_file(resource_path('medium_ewd.txt'))
+
+    lazy = Dijkstra(digraph)
+    eager = EagerDijkstra(digraph)
+
+    for v in range(digraph.v):
+        assert lazy._edge_to[v] == eager._edge_to[v]  # TODO: path_to

@@ -81,7 +81,7 @@ class DfsPath:
 
 class BfsPath:
     """Shortest path search with bfs."""
-    
+
     def __init__(self, g: Graph, s: int):
         self.source = s
         self.marked = [False] * g.v
@@ -164,6 +164,10 @@ class DirectedEdge:
             source=self.source, target=self.target, weight=self.weight)
 
     def __hash__(self): return hash(self.__repr__())
+
+    def __eq__(self, other): return self.source == other.source \
+                                    and self.target == other.target \
+                                    and self.weight == other.weight
 
 
 class EdgeWeightedGraph:
@@ -253,7 +257,7 @@ class EdgeWeightedDigraph:
         return bag
 
 
-class LazyPrim:
+class Prim:
     """
     Prim's algorithm to find Minimum Spanning Tree.
 
@@ -290,7 +294,7 @@ class LazyPrim:
                 self._min_pq.push(e)
 
 
-class Prim:
+class EagerPrim:
     """
     Prim's algorithm to find Minimum Spanning Tree.
 
@@ -345,7 +349,51 @@ class Kruskal:
 
 
 class Dijkstra:
-    """Dijkstra's shortest path algorithm."""
+    """Dijkstra's shortest path algorithm.
+
+    This is so-called 'lazy' implementation without using IndexMinPq.
+    """
+
+    class EdgeWithDistanceFromSource:
+        def __init__(self, e: DirectedEdge, distance_from_source: float):
+            self.edge = e
+            self.dist = distance_from_source + e.weight
+
+        def __lt__(self, other): return self.dist < other.dist
+
+    def __init__(self, g: EdgeWeightedDigraph):
+        self.distance_to = [float('inf')] * g.v
+
+        self._edge_to = [None] * g.v
+        self._marked = [False] * g.v
+
+        self._min_pq = MinHeap()
+
+        self.distance_to[0] = 0.0
+        self._relax_vertex(g, 0)
+
+        while self._min_pq:
+            e = self._min_pq.pop_min().edge
+
+            if not self._marked[e.target]: self._relax_vertex(g, e.target)
+
+    def _relax_vertex(self, g: EdgeWeightedDigraph, v: int) -> None:
+        self._marked[v] = True
+
+        for e in g.adj[v]:
+            w = e.target
+
+            if self.distance_to[w] > self.distance_to[v] + e.weight:
+                self.distance_to[w] = self.distance_to[v] + e.weight
+                self._edge_to[w] = e
+                self._min_pq.push(Dijkstra.EdgeWithDistanceFromSource(e, self.distance_to[w]))
+
+
+class EagerDijkstra:
+    """Dijkstra's shortest path algorithm.
+
+    Eager version with usage of IndexMinPq.
+    """
 
     def __init__(self, g: EdgeWeightedDigraph):
         self.distance_to = [float('inf')] * g.v
