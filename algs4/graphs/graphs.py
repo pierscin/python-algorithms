@@ -3,6 +3,7 @@ from functools import total_ordering
 from typing import Set, Optional, Sequence, DefaultDict, Deque
 
 from algs4.data_structures import MinHeap
+from algs4.union_find import Uf
 
 
 class Graph:
@@ -167,7 +168,7 @@ class EdgeWeightedGraph:
             v w weight # edge E
         """
         with open(path) as f:
-            g = EdgeWeightedGraph(int(f.readline()))
+            g = cls(int(f.readline()))
             _ = int(f.readline())  # pierscin: edge count
 
             for line in f:
@@ -184,9 +185,9 @@ class EdgeWeightedGraph:
     def edges(self):
         bag = set()
 
-        for _, edges in self.adj.items():
+        for v, edges in self.adj.items():
             for e in edges:
-                if e.w > e.v: bag.add(e)
+                if e.other(v) > v: bag.add(e)
 
         return bag
 
@@ -196,7 +197,7 @@ class Prim:
 
     def __init__(self, g: EdgeWeightedGraph):
         self.mst = deque()  # type: Deque[Edge]
-        self.weight = 0  # type: int
+        self.weight = 0  # type: float
 
         self._marked = [False] * g.v
         self._min_pq = MinHeap()
@@ -204,7 +205,7 @@ class Prim:
 
         self._visit(g, 0)
 
-        while self._min_pq:
+        while self._min_pq and len(self.mst) < g.v - 1:
             e = self._min_pq.pop_min()  # type: Edge
             v, w = e.v, e.other(e.v)
 
@@ -222,3 +223,23 @@ class Prim:
             if not self._marked[e.other(v)] and e.weight < self._distance_to[e.other(v)]:
                 self._distance_to[e.other(v)] = e.weight
                 self._min_pq.push(e)  # TODO: indexed min pq
+
+
+class Kruskal:
+    """Kruskal's algorithm to find Minimum Spanning Tree."""
+
+    def __init__(self, g: EdgeWeightedGraph):
+        self.mst = deque()  # type: Deque[Edge]
+        self.weight = 0  # type: float
+
+        self._min_pq = MinHeap.from_iterable(g.edges())
+        self._uf = Uf(g.v)
+
+        while self._min_pq and len(self.mst) < g.v - 1:
+            e = self._min_pq.pop_min()  # type: Edge
+            v, w = e.v, e.other(e.v)
+
+            if not self._uf.connected(v, w):
+                self._uf.union(v, w)
+                self.weight += e.weight
+                self.mst.append(e)

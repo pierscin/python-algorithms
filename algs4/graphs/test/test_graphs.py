@@ -2,7 +2,7 @@ import os
 
 from pytest import approx
 
-from algs4.graphs.graphs import Graph, EdgeWeightedGraph, Prim
+from algs4.graphs.graphs import Graph, EdgeWeightedGraph, Prim, Kruskal
 
 
 def resource_path(name: str) -> str:
@@ -23,7 +23,19 @@ def test_edge_weighted_graph_creation_from_file():
     assert ewg.e == 16
 
 
-def test_calculating_mst_weight_with_prim():
+def test_calculating_tiny_mst_weight_with_prim():
     mst = Prim(EdgeWeightedGraph.from_file(resource_path('tiny_ewg.txt')))
 
-    assert mst.weight == approx(0.19 + 0.26 + 0.17 + 0.35 + 0.28 + 0.40 + 0.16)
+    assert mst.weight == approx(1.81)
+
+
+def test_calculating_tiny_mst_weight_with_kruskal():
+    mst = Kruskal(EdgeWeightedGraph.from_file(resource_path('tiny_ewg.txt')))
+
+    assert mst.weight == approx(1.81)
+
+
+def test_compare_mst_weight_on_larger_data_set():
+    ewg = EdgeWeightedGraph.from_file(resource_path('medium_ewg.txt'))
+
+    assert Prim(ewg).weight == approx(Kruskal(ewg).weight)

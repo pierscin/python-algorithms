@@ -1,5 +1,5 @@
 import heapq
-from typing import Any, Optional
+from typing import Any, Optional, Iterable
 
 from sortedcontainers import SortedList
 
@@ -15,6 +15,14 @@ class MinHeap:
     def __init__(self): self.heap = []
 
     def __len__(self): return len(self.heap)
+
+    @classmethod
+    def from_iterable(cls, A: Iterable) -> 'MinHeap':
+        pq = cls()
+
+        [pq.push(x) for x in A]
+
+        return pq
 
     def push(self, x):
         """Push element to the heap."""
