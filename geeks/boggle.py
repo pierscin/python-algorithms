@@ -24,7 +24,7 @@ Returns:
 """
 from typing import List, Dict, Set, Callable
 
-from algs4.graphs.graphs import Graph
+from algs4.graphs import Graph
 
 
 def find_words(boggle: List[List[str]], is_word: Callable[[str], bool]) -> Set[str]:
