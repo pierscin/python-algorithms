@@ -2,7 +2,7 @@ from collections import deque, defaultdict
 from functools import total_ordering
 from typing import Set, Optional, Sequence, DefaultDict, Deque
 
-from algs4.data_structures import MinHeap
+from algs4.priority_queues import MinHeap, IndexMinPq
 from algs4.union_find import Uf
 
 
@@ -192,8 +192,12 @@ class EdgeWeightedGraph:
         return bag
 
 
-class Prim:
-    """Prim's algorithm to find Minimum Spanning Tree."""
+class LazyPrim:
+    """
+    Prim's algorithm to find Minimum Spanning Tree.
+
+    Implementation is simple, because it doesn't "clean" priority queue of unused entries.
+    """
 
     def __init__(self, g: EdgeWeightedGraph):
         self.mst = deque()  # type: Deque[Edge]
@@ -222,7 +226,41 @@ class Prim:
         for e in g.adj[v]:
             if not self._marked[e.other(v)] and e.weight < self._distance_to[e.other(v)]:
                 self._distance_to[e.other(v)] = e.weight
-                self._min_pq.push(e)  # TODO: indexed min pq
+                self._min_pq.push(e)
+
+
+class Prim:
+    """
+    Prim's algorithm to find Minimum Spanning Tree.
+
+    Keeps track of minimum distances to each vertex on IndexMinPq.
+    """
+
+    def __init__(self, g: EdgeWeightedGraph):
+        self.mst = deque()  # type: Deque[Edge]
+        self.weight = 0  # type: float
+
+        self._marked = [False] * g.v
+        self._distance_to = [float('inf')] * g.v
+
+        self._min_pq = IndexMinPq(g.v)
+        self._distance_to[0] = 0.0
+        self._min_pq.insert(0, 0.0)
+
+        while self._min_pq:
+            self.weight += self._min_pq.min_key()
+            self._visit(g, self._min_pq.remove_min())
+
+    def _visit(self, g: EdgeWeightedGraph, v: int) -> None:
+        self._marked[v] = True
+        for e in g.adj[v]:
+            w = e.other(v)
+            if self._marked[w]: continue
+
+            if e.weight < self._distance_to[w]:
+                self._distance_to[w] = e.weight
+                if w in self._min_pq: self._min_pq.change_key(w, e.weight)
+                else: self._min_pq.insert(w, e.weight)
 
 
 class Kruskal:
