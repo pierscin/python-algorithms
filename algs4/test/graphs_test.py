@@ -2,7 +2,7 @@ import os
 
 from pytest import approx
 
-from algs4.graphs.graphs import Graph, EdgeWeightedGraph, EagerPrim, Kruskal, Prim, Dijkstra, EdgeWeightedDigraph, \
+from algs4.graphs import Graph, EdgeWeightedGraph, EagerPrim, Kruskal, Prim, Dijkstra, EdgeWeightedDigraph, \
     EagerDijkstra
 
 
