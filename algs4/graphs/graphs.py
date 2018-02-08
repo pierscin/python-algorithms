@@ -1,6 +1,6 @@
 from collections import deque, defaultdict
 from functools import total_ordering
-from typing import Set, Optional, Sequence, DefaultDict, Deque
+from typing import Set, Optional, Sequence, DefaultDict, Deque, Iterable
 
 from algs4.priority_queues import MinHeap, IndexMinPq
 from algs4.union_find import Uf
@@ -147,6 +147,25 @@ class Edge:
     def __hash__(self): return hash(self.__repr__())
 
 
+class DirectedEdge:
+    """Edge with weight and direction."""
+
+    def __init__(self, source, target, weight):
+        self.source = source
+        self.target = target
+        self.weight = weight
+
+    def __str__(self):
+        return '{source} -> {target} {weight:.2f}'.format(
+            source=self.source, target=self.target, weight=self.weight)
+
+    def __repr__(self):
+        return 'DirectedEdge(source={source}, target={target}, weight={weight})'.format(
+            source=self.source, target=self.target, weight=self.weight)
+
+    def __hash__(self): return hash(self.__repr__())
+
+
 class EdgeWeightedGraph:
     """Undirected graph with weighted edges."""
 
@@ -182,12 +201,54 @@ class EdgeWeightedGraph:
         self.adj[e.v].add(e), self.adj[e.w].add(e)
         self.e += 1
 
-    def edges(self):
+    def edges(self) -> Iterable[Edge]:
         bag = set()
 
         for v, edges in self.adj.items():
             for e in edges:
                 if e.other(v) > v: bag.add(e)
+
+        return bag
+
+
+class EdgeWeightedDigraph:
+    """Directed graph with weighted edges."""
+
+    def __init__(self, v: int):
+        """Initialize with 'v' vertices and 0 edges."""
+        self.v, self.e = v, 0  # type: int, int
+        self.adj = defaultdict(set)  # type: DefaultDict[int, Set[DirectedEdge]]
+
+    @classmethod
+    def from_file(cls, path: str) -> 'EdgeWeightedDigraph':
+        """Create from file in format:
+
+            V # vertices count
+            E # edge count
+            v w weight # edge 1 from v to w
+            ...
+            v w weight # edge E from v to w
+        """
+        with open(path) as f:
+            g = cls(int(f.readline()))
+            _ = int(f.readline())  # pierscin: edge count
+
+            for line in f:
+                tokens = line.split()
+
+                g.add_edge(DirectedEdge(source=int(tokens[0]), target=int(tokens[1]), weight=float(tokens[2])))
+
+        return g
+
+    def add_edge(self, e: DirectedEdge) -> None:
+        self.adj[e.source].add(e)
+        self.e += 1
+
+    def edges(self) -> Iterable[DirectedEdge]:
+        bag = set()
+
+        for v, edges in self.adj.items():
+            for e in edges: bag.add(e)
 
         return bag
 
@@ -281,3 +342,29 @@ class Kruskal:
                 self._uf.union(v, w)
                 self.weight += e.weight
                 self.mst.append(e)
+
+
+class Dijkstra:
+    """Dijkstra's shortest path algorithm."""
+
+    def __init__(self, g: EdgeWeightedDigraph):
+        self.distance_to = [float('inf')] * g.v
+        self._edge_to = [None] * g.v
+
+        self._min_pq = IndexMinPq(g.v)
+        self.distance_to[0] = 0.0
+        self._min_pq.insert(0, 0.0)
+
+        while self._min_pq:
+            self._relax_vertex(g, self._min_pq.remove_min())
+
+    def _relax_vertex(self, g: EdgeWeightedDigraph, v: int) -> None:
+        for e in g.adj[v]:
+            w = e.target
+
+            if self.distance_to[w] > self.distance_to[v] + e.weight:
+                self.distance_to[w] = self.distance_to[v] + e.weight
+                self._edge_to[w] = e
+
+                if w in self._min_pq: self._min_pq.change_key(w, self.distance_to[w])
+                else: self._min_pq.insert(w, self.distance_to[w])
