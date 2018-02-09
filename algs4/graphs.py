@@ -257,6 +257,30 @@ class EdgeWeightedDigraph:
         return bag
 
 
+class Topological:
+    """Sorts vertices with dfs in reverse post-order.
+
+    Assumes acyclic graph.
+    """
+
+    def __init__(self, g):
+        self._marked = [False] * g.v
+        self.order = []
+
+        for v in range(g.v):
+            if not self._marked[v]: self._dfs(g, v)
+
+        self.order.reverse()
+
+    def _dfs(self, g, v: int):
+        self._marked[v] = True
+
+        for e in g.adj[v]:
+            if not self._marked[e.target]: self._dfs(g, e.target)
+
+        self.order.append(v)
+
+
 class Prim:
     """
     Prim's algorithm to find Minimum Spanning Tree.
@@ -361,7 +385,7 @@ class Dijkstra:
 
         def __lt__(self, other): return self.dist < other.dist
 
-    def __init__(self, g: EdgeWeightedDigraph):
+    def __init__(self, g: EdgeWeightedDigraph, source: int):
         self.distance_to = [float('inf')] * g.v
 
         self._edge_to = [None] * g.v
@@ -369,8 +393,8 @@ class Dijkstra:
 
         self._min_pq = MinHeap()
 
-        self.distance_to[0] = 0.0
-        self._relax_vertex(g, 0)
+        self.distance_to[source] = 0.0
+        self._relax_vertex(g, source)
 
         while self._min_pq:
             e = self._min_pq.pop_min().edge
@@ -395,13 +419,13 @@ class EagerDijkstra:
     Eager version with usage of IndexMinPq.
     """
 
-    def __init__(self, g: EdgeWeightedDigraph):
+    def __init__(self, g: EdgeWeightedDigraph, source: int):
         self.distance_to = [float('inf')] * g.v
         self._edge_to = [None] * g.v
 
         self._min_pq = IndexMinPq(g.v)
-        self.distance_to[0] = 0.0
-        self._min_pq.insert(0, 0.0)
+        self.distance_to[source] = 0.0
+        self._min_pq.insert(source, 0.0)
 
         while self._min_pq:
             self._relax_vertex(g, self._min_pq.remove_min())
@@ -416,3 +440,27 @@ class EagerDijkstra:
 
                 if w in self._min_pq: self._min_pq.change_key(w, self.distance_to[w])
                 else: self._min_pq.insert(w, self.distance_to[w])
+
+
+class AcyclicSp:
+    """Calculates shortest path for acyclic graph."""
+
+    def __init__(self, g: EdgeWeightedDigraph, source: int):
+        self.distance_to = [float('inf')] * g.v
+
+        self._edge_to = [None] * g.v
+
+        self.distance_to[source] = 0.0
+
+        for v in Topological(g).order: self._relax_vertex(g, v)
+
+    def _relax_vertex(self, g: EdgeWeightedDigraph, v: int) -> None:
+
+        for e in g.adj[v]:
+            w = e.target
+
+            if self.distance_to[w] > self.distance_to[v] + e.weight:
+                self.distance_to[w] = self.distance_to[v] + e.weight
+                self._edge_to[w] = e
+
+

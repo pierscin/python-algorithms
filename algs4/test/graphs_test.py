@@ -3,7 +3,7 @@ import os
 from pytest import approx
 
 from algs4.graphs import Graph, EdgeWeightedGraph, EagerPrim, Kruskal, Prim, Dijkstra, EdgeWeightedDigraph, \
-    EagerDijkstra
+    EagerDijkstra, AcyclicSp
 
 
 def resource_path(name: str) -> str:
@@ -62,15 +62,21 @@ def test_calculating_shortest_path_on_tiny_data_with_dijkstra():
 
     digraph = EdgeWeightedDigraph.from_file(resource_path('tiny_ewd.txt'))
 
-    for sp in (EagerDijkstra(digraph), Dijkstra(digraph)):
+    for sp in (EagerDijkstra(digraph, 0), Dijkstra(digraph, 0)):
         for v, d in v_to_d.items(): assert sp.distance_to[v] == approx(d)
 
 
 def test_compare_shortest_paths_on_larger_data_set():
     digraph = EdgeWeightedDigraph.from_file(resource_path('medium_ewd.txt'))
 
-    lazy = Dijkstra(digraph)
-    eager = EagerDijkstra(digraph)
+    lazy = Dijkstra(digraph, 0)
+    eager = EagerDijkstra(digraph, 0)
 
     for v in range(digraph.v):
         assert lazy._edge_to[v] == eager._edge_to[v]  # TODO: path_to
+
+
+def test_shortest_path_in_dag():
+    asp = AcyclicSp(EdgeWeightedDigraph.from_file(resource_path('tiny_ewdag.txt')), 5)
+
+    # TODO: assert
